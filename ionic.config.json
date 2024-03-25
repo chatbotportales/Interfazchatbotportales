@@ -1,0 +1,7 @@
+{
+  "name": "chatbotportalesinteractivos",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
