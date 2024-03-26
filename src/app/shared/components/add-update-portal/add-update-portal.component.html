@@ -1,0 +1,96 @@
+<app-header [isModal]="true" [title]="portal ? 'Actualizar Portal' : 'Agregar Portal'"></app-header>
+
+<ion-content>
+
+  <form [formGroup]="form" class="ion-padding ion-text-center" (ngSubmit)="submit()" (keypress.enter)="submit()">
+    
+    <ion-avatar *ngIf="form.value.image">
+      <img [src]="form.value.image" />
+    </ion-avatar>
+
+    <ion-icon class="image-icon" name="image-outline" *ngIf="!form.value.image"></ion-icon>
+    <br>
+    <ion-button (click)="takeImage()" size="small" shape="roud" mode="ios">
+      Tomar/Seleccionar
+    </ion-button>
+
+
+    <app-custom-input 
+    autocomplete="name"
+    [control]="form.controls.name"
+    type="text"
+    label="Nombre"
+    ></app-custom-input>
+
+    <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.touched">
+      <div *ngIf="form.controls.name.errors?.['required']">El nombre es obligatorio</div>
+      <div *ngIf="form.controls.name.errors?.['minlength']">Minimo 4 caracteres</div>
+    </div>
+
+    <app-custom-input 
+    autocomplete="address"
+    [control]="form.controls.address"
+    type="text"
+    label="Dirección"
+    ></app-custom-input>
+
+    <div class="validators" *ngIf="form.controls.address.errors && form.controls.address.touched">
+      <div *ngIf="form.controls.address.errors?.['required']">La dirección es obligatoria</div>
+    </div>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <ion-item>
+            <ion-label>Horario Lunes a Viernes:</ion-label>
+          </ion-item>
+          <br>          
+          <p>{{ form.value.mondayStartTime | date:'HH:mm' }} - {{ form.value.mondayEndTime | date:'HH:mm' }}</p>
+
+        </ion-col>
+        <ion-col size="4">
+          <ion-item>
+            <ion-datetime presentation="time" formControlName="mondayStartTime" mode="ios"></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item>
+            <ion-datetime presentation="time" formControlName="mondayEndTime" mode="ios" label="Cierre"></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <ion-item>
+            <ion-label>Horario Sabados:</ion-label>
+          </ion-item>
+          <br>   
+          <ion-icon name="clock-outline"></ion-icon>       
+          <p>{{ form.value.saturdayStartTime | date:'HH:mm' }} - {{ form.value.saturdayEndTime | date:'HH:mm' }}</p>
+
+        </ion-col>
+        <ion-col size="4">
+          <ion-item>
+            <ion-datetime presentation="time" formControlName="saturdayStartTime" mode="ios"></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item>
+            <ion-datetime presentation="time" formControlName="saturdayEndTime" mode="ios" label="Cierre"></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+    <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form.invalid">
+     {{portal ? 'Actualizar Portal' : 'Agregar Portal'}}
+      <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
+    
+  </form>
+
+</ion-content>

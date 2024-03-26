@@ -1,0 +1,83 @@
+<app-header title="Inicio"></app-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card mode="ios" color="secondary" class="d-flex-center ion-text-center" *ngIf="!loading && portales.length" >
+    <div>
+      <h5>{{portales.length}}</h5>
+      <p>Portales</p>
+    </div>
+  </ion-card>
+
+  <ion-list *ngIf="!loading">
+    <ion-item-sliding class="product-item" *ngFor="let p of portales">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]="p.image" />
+        </ion-avatar>
+        <ion-label>
+          <div class="name">{{p.name}}</div>
+          <div class="data">
+            <strong>Dirección:</strong> {{p.address}}
+            <br>
+            <strong>Horarios Lunes a Viernes:</strong> {{p.mondayStartTime | date:'HH:mm' }} - {{p.mondayEndTime | date:'HH:mm' }}
+            <strong>& Sabados:</strong> {{p.saturdayStartTime | date:'HH:mm' }} - {{p.saturdayEndTime | date:'HH:mm' }}
+          </div>
+          <ion-chip color="primary" mode="ios" outline="true">
+            <ion-label>Cursos: </ion-label>
+          </ion-chip>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options>
+
+        <ion-item-option (click)="addUpdatePortal(p)">
+          <ion-icon class="option-btn" name="create-outline"></ion-icon>
+        </ion-item-option>
+
+        <ion-item-option color="danger" (click)="ConfirmDeletePortal(p)">
+          <ion-icon class="option-btn" name="trash-outline"></ion-icon>
+        </ion-item-option>
+
+
+      </ion-item-options>
+
+
+
+    </ion-item-sliding>
+  </ion-list>
+
+  <!--loade-->
+  <ion-list *ngIf="loading">
+    
+      <ion-item class="product-item" *ngFor="let p of [1,1,1,1,1,1,1,]">
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated style="width: 100%; height: 100%;"></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <div> <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text> </div>
+          <div> <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text> </div>
+        </ion-label>
+      </ion-item>
+
+  </ion-list>
+
+  <div *ngIf="!loading && !portales.length" class="empty">
+    <img src="assets/icon/robot.svg" class="shield-icon" height="100px">
+    <h3>No hay portales disponibles</h3>
+  </div>
+
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addUpdatePortal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+
+
+</ion-content>

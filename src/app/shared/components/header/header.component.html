@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar color="primary">
+
+    <ion-buttons slot="start">
+
+      <ion-back-button *ngIf="balckButton" [defaultHref]="balckButton"></ion-back-button>
+
+      <ion-button *ngIf="isModal" (click)="dismissModal()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-button>
+      
+      <img src="assets/icon/robot.svg" class="shield-icon">
+
+    </ion-buttons>
+
+    
+    
+    <ion-title>
+      <strong>{{title}}</strong>
+      <div class="admin">ChatBot</div>
+    </ion-title>
+
+
+  </ion-toolbar>
+</ion-header>
