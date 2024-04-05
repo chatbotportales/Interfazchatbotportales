@@ -18,11 +18,12 @@ export class HomePage implements OnInit {
 
   portales: Portal[] = [];
   loading: boolean = false;
-
+  iduser = ""
   ngOnInit() {
   }
 
   user(): User{
+    this.iduser = this.utilsSvs.getFromLocalStorage('user').id
     return this.utilsSvs.getFromLocalStorage('user');
   }
 

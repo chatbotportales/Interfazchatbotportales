@@ -1,4 +1,4 @@
-<app-header title="Inicio"></app-header>
+<app-header [showMenu]="true" title="Inicio"></app-header>
 
 <ion-content [fullscreen]="true">
 
@@ -31,9 +31,10 @@
             <ion-label>Cursos: </ion-label>
           </ion-chip>
         </ion-label>
+        <ion-icon *ngIf="p.iduser === user().uid" class="option-btn" name="create-outline"></ion-icon>
       </ion-item>
 
-      <ion-item-options>
+      <ion-item-options *ngIf="p.iduser === user().uid">
 
         <ion-item-option (click)="addUpdatePortal(p)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>

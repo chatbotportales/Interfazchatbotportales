@@ -38,6 +38,36 @@
       <div *ngIf="form.controls.address.errors?.['required']">La dirección es obligatoria</div>
     </div>
 
+    <app-custom-input 
+    autocomplete="email"
+    [control]="form.controls.email"
+    type="text"
+    label="Correo"
+    ></app-custom-input>
+
+    <app-custom-input 
+    autocomplete="phone"
+    [control]="form.controls.phone"
+    type="text"
+    label="Telefono"
+    ></app-custom-input>
+
+    <app-custom-input 
+    autocomplete="url"
+    [control]="form.controls.url"
+    type="text"
+    label="link Pagina"
+    ></app-custom-input>
+
+    <app-custom-input 
+    autocomplete="linkMaps"
+    [control]="form.controls.linkMap"
+    type="text"
+    label="Link Google Maps"
+    ></app-custom-input>
+
+    
+
     <ion-grid>
       <ion-row>
         <ion-col size="4">

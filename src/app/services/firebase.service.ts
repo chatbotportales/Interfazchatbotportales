@@ -44,7 +44,11 @@ export class FirebaseService {
 
   signOut(){
     getAuth().signOut();
-    localStorage.removeItem('user');
+    try {
+      localStorage.removeItem('user');
+    } catch (error) {
+      console.error('Error removing item from localStorage:', error);
+    }
     this.utilsSvs.routerlink('/auth');
   }
 

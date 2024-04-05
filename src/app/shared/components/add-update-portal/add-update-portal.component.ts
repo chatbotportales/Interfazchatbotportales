@@ -16,6 +16,8 @@ export class AddUpdatePortalComponent  implements OnInit {
 
   form = new FormGroup({
     id: new FormControl(''),
+    iduser: new FormControl(''),
+    
     name: new FormControl('', [Validators.required, Validators.minLength(4)]),
     image: new FormControl('', [Validators.required,]),
     address: new FormControl('', [Validators.required,]),
@@ -24,6 +26,11 @@ export class AddUpdatePortalComponent  implements OnInit {
     mondayEndTime: new FormControl('', [Validators.required]),
     saturdayStartTime: new FormControl('', [Validators.required]),
     saturdayEndTime: new FormControl('', [Validators.required]),
+
+    email: new FormControl(''),
+    phone: new FormControl(''),
+    url: new FormControl(''),
+    linkMap: new FormControl(''),
 
   })
 
@@ -55,6 +62,8 @@ export class AddUpdatePortalComponent  implements OnInit {
 
       //let path = `users/${this.user.uid}/products`
       let path = `portales`
+      let uid = this.user.uid;
+      this.form.controls.iduser.setValue(uid);
 
       const loading = await this.utilsSvs.loading();
       await loading.present();

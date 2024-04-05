@@ -16,6 +16,7 @@ export class SignUpPage implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required,]),
     name: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    status: new FormControl('0'),
   })
 
   firebaseSvc = inject(FirebaseService);
@@ -62,8 +63,8 @@ export class SignUpPage implements OnInit {
 
       this.firebaseSvc.setDocument(path, this.form.value).then(async res =>{
         
-        this.utilsSvs.saveInLocalStorage("user", this.form.value);
-        this.utilsSvs.routerlink('main/home');
+        //this.utilsSvs.saveInLocalStorage("user", this.form.value);
+        this.utilsSvs.routerlink('/auth');
         this.form.reset();
 
       }).catch(error => {
@@ -77,6 +78,13 @@ export class SignUpPage implements OnInit {
         })
       }).finally(() => {
         loading.dismiss();
+        this.utilsSvs.presentToast({
+          message: `Usuario Registrado, debe esperar a habilitar el perfil`,
+          duration: 2800,
+          color: 'primary',
+          position: 'middle',
+          icon: 'person-circle-outline',
+        });
       })
     }
   }

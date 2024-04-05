@@ -3,6 +3,8 @@
 
     <ion-buttons slot="start">
 
+      <ion-menu-button *ngIf="showMenu" menu="menu-content"></ion-menu-button>
+
       <ion-back-button *ngIf="balckButton" [defaultHref]="balckButton"></ion-back-button>
 
       <ion-button *ngIf="isModal" (click)="dismissModal()">
@@ -10,6 +12,9 @@
       </ion-button>
       
       <img src="assets/icon/robot.svg" class="shield-icon">
+
+      
+      
 
     </ion-buttons>
 

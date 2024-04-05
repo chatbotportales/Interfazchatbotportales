@@ -1,7 +1,41 @@
-<app-header title="Perfil"></app-header>
+<app-header [showMenu]="true" title="Perfil"></app-header>
 
 <ion-content [fullscreen]="true">
-  <ion-button (click)="signOut()">
-    Click me
-  </ion-button>
+ 
+  
+  <form [formGroup]="form" class="ion-padding ion-text-center" (ngSubmit)="submit()" (keypress.enter)="submit()">
+
+    <ion-icon color="primary" class="avatar-icon" name="person-circle-outline"></ion-icon>
+    <h4>{{userp.name}}</h4>
+    <h5>{{userp.email}}</h5>
+
+    <app-custom-input 
+    autocomplete="name"
+    [control]="form.controls.name"
+    type="text"
+    label="Nombre"
+    ></app-custom-input>
+
+    <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.touched">
+      <div *ngIf="form.controls.name.errors?.['required']">El nombre es obligatorio</div>
+      <div *ngIf="form.controls.name.errors?.['minlength']">Minimo 4 caracteres</div>
+    </div>
+
+    <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form.invalid">
+      Actualizar Usuario
+      <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
+    
+  </form>
+
+  <ion-item button detail>
+    <ion-icon color="primary" slot="start" name="person-outline"></ion-icon>
+    <ion-label>Editar Perfil</ion-label>
+  </ion-item>
+
+  <ion-item button detail>
+    <ion-icon color="primary" slot="start" name="document-outline"></ion-icon>
+    <ion-label>terminos & condiciones</ion-label>
+  </ion-item>
+
 </ion-content>

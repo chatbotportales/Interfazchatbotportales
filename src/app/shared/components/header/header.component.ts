@@ -11,6 +11,7 @@ export class HeaderComponent  implements OnInit {
   @Input() title!: string;
   @Input() balckButton!: string;
   @Input() isModal!: boolean;
+  @Input() showMenu!: boolean;
 
   utilsSvs = inject(UtilsService);
 
