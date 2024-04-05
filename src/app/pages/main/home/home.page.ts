@@ -5,6 +5,8 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AddUpdatePortalComponent } from 'src/app/shared/components/add-update-portal/add-update-portal.component';
 import { orderBy } from 'firebase/firestore'
+import { Router, NavigationExtras } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -18,12 +20,12 @@ export class HomePage implements OnInit {
 
   portales: Portal[] = [];
   loading: boolean = false;
-  iduser = ""
+  idUser = ""
   ngOnInit() {
   }
 
   user(): User{
-    this.iduser = this.utilsSvs.getFromLocalStorage('user').id
+    this.idUser = this.utilsSvs.getFromLocalStorage('user').id
     return this.utilsSvs.getFromLocalStorage('user');
   }
 
@@ -102,7 +104,7 @@ export class HomePage implements OnInit {
       this.portales = this.portales.filter(p=> p.id !== portal.id);
 
       this.utilsSvs.presentToast({
-        message: "Portal acteliminado exitosamente",
+        message: "Portal eliminado exitosamente",
         duration: 1800,
         color: 'success',
         position: 'middle',
@@ -124,6 +126,20 @@ export class HomePage implements OnInit {
       loading.dismiss();
     })
 
+  }
+  constructor(private navCtrl: NavController, private router: Router) {}
+  goToCursos(id: string, name:string) {
+    
+    // Puedes pasar parámetros a través de queryParams o state
+    //let navigationExtras: NavigationExtras = {
+    //  state: {
+    //    id: id
+    //  }
+    //};
+    
+    // Navegar a la página "cursos" con los parámetros
+    //this.utilsSvs.routerlink('/main/course');
+    this.router.navigate(['/main/course'], { queryParams: { id: id, name: name} });
   }
 
 }

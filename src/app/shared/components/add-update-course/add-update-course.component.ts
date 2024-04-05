@@ -1,36 +1,32 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Portal } from 'src/app/models/portal.model';
+import { Course } from 'src/app/models/course.model';
 import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-add-update-portal',
-  templateUrl: './add-update-portal.component.html',
-  styleUrls: ['./add-update-portal.component.scss'],
+  selector: 'app-add-update-course',
+  templateUrl: './add-update-course.component.html',
+  styleUrls: ['./add-update-course.component.scss'],
 })
-export class AddUpdatePortalComponent  implements OnInit {
+export class AddUpdateCourseComponent  implements OnInit {
 
-  @Input() portal: Portal;
+  @Input() course: Course;
 
   form = new FormGroup({
     id: new FormControl(''),
-    idUser: new FormControl(''),
+    idPortal: new FormControl(''),
     
-    name: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    image: new FormControl('', [Validators.required,]),
-    address: new FormControl('', [Validators.required,]),
-
-    mondayStartTime: new FormControl('', [Validators.required]),
-    mondayEndTime: new FormControl('', [Validators.required]),
-    saturdayStartTime: new FormControl('', [Validators.required]),
-    saturdayEndTime: new FormControl('', [Validators.required]),
-
-    email: new FormControl(''),
-    phone: new FormControl(''),
-    url: new FormControl(''),
-    linkMap: new FormControl(''),
+    name: new FormControl('', [Validators.required,Validators.minLength(4)]),
+    description: new FormControl('', [Validators.required,]),
+    duration: new FormControl('', [Validators.required,]),
+    status: new FormControl('', [Validators.required,]),
+    modality: new FormControl('', [Validators.required,]),
+    creationDate: new FormControl(''),
+    modificationDate: new FormControl(''),
+    prerequisites: new FormControl('', [Validators.required,]),
 
   })
 
@@ -38,42 +34,35 @@ export class AddUpdatePortalComponent  implements OnInit {
   utilsSvs = inject(UtilsService);
 
   user = {} as User;
+  idPortal: string;
 
-
+  constructor(private route: ActivatedRoute) { }
   ngOnInit() {
-    this.user = this.utilsSvs.getFromLocalStorage('user');
-    if (this.portal) this.form.setValue(this.portal);
-  }
-
-  async takeImage(){
-    const dataUrl = (await this.utilsSvs.takePicture('Imagen del Portal')).dataUrl;
-    this.form.controls.image.setValue(dataUrl);
+    this.route.queryParams.subscribe(params => {
+      this.idPortal = params['id'];
+    });
+    if (this.course) this.form.setValue(this.course);
   }
 
   submit(){
     if (this.form.valid){
-      if (this.portal) this.updatePortal();
+      if (this.course) this.updatePortal();
       else this.createPortal();
     }
   }
 
   async createPortal(){
-   
-
+  
+      let currentDate = new Date();
+      let formattedDate = currentDate.toLocaleString();
       //let path = `users/${this.user.uid}/products`
-      let path = `portales`
-      let uid = this.user.uid;
-      this.form.controls.idUser.setValue(uid);
+      let path = `courses`
+      this.form.controls.idPortal.setValue(this.idPortal);
+      this.form.controls.modificationDate.setValue(formattedDate);
+      this.form.controls.creationDate.setValue(formattedDate);
 
       const loading = await this.utilsSvs.loading();
       await loading.present();
-
-      // sibir imagen y obtene url
-      let dataUrl = this.form.value.image;
-      //this.user.uid
-      let imagePath = `portales/${Date.now()}`;
-      let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl);
-      this.form.controls.image.setValue(imageUrl);
 
       delete this.form.value.id;
 
@@ -82,7 +71,7 @@ export class AddUpdatePortalComponent  implements OnInit {
         this.utilsSvs.dismissModal({success: true});
 
         this.utilsSvs.presentToast({
-          message: "Portal Creado exitosamente",
+          message: "Curso Creado exitosamente",
           duration: 1800,
           color: 'success',
           position: 'middle',
@@ -109,19 +98,13 @@ export class AddUpdatePortalComponent  implements OnInit {
 
   async updatePortal(){
 
-      let path = `portales/${this.portal.id}`
+      let path = `courses/${this.course.id}`
 
       const loading = await this.utilsSvs.loading();
-      await loading.present();
-
-      // sibir imagen y obtene url
-      let dataUrl = this.form.value.image;
-      if ( this.form.value.image !== this.portal.image ){
-        let imagePath = await this.firebaseSvc.getFilePath(this.portal.image);
-        let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl);
-        this.form.controls.image.setValue(imageUrl);
-      }
-      
+      await loading.present();      
+      let currentDate = new Date();
+      let formattedDate = currentDate.toLocaleString();
+      this.form.controls.modificationDate.setValue(formattedDate);
 
       delete this.form.value.id;
 
@@ -130,7 +113,7 @@ export class AddUpdatePortalComponent  implements OnInit {
         this.utilsSvs.dismissModal({success: true});
 
         this.utilsSvs.presentToast({
-          message: "Portal actualizado exitosamente",
+          message: "Curso actualizado exitosamente",
           duration: 1800,
           color: 'success',
           position: 'middle',
@@ -153,8 +136,5 @@ export class AddUpdatePortalComponent  implements OnInit {
       })
   
   }
-
-  
- 
 
 }

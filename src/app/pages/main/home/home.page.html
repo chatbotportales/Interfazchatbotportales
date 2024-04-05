@@ -27,14 +27,15 @@
             <strong>Horarios Lunes a Viernes:</strong> {{p.mondayStartTime | date:'HH:mm' }} - {{p.mondayEndTime | date:'HH:mm' }}
             <strong>& Sabados:</strong> {{p.saturdayStartTime | date:'HH:mm' }} - {{p.saturdayEndTime | date:'HH:mm' }}
           </div>
-          <ion-chip color="primary" mode="ios" outline="true">
-            <ion-label>Cursos: </ion-label>
-          </ion-chip>
+          <div (click)="goToCursos(p.id, p.name)">
+            <ion-chip color="primary" mode="ios" outline="true">Cursos</ion-chip>
+          </div>
+      
         </ion-label>
-        <ion-icon *ngIf="p.iduser === user().uid" class="option-btn" name="create-outline"></ion-icon>
+        <ion-icon *ngIf="p.idUser === user().uid" class="option-btn" name="chevron-back-outline"></ion-icon>
       </ion-item>
 
-      <ion-item-options *ngIf="p.iduser === user().uid">
+      <ion-item-options *ngIf="p.idUser === user().uid">
 
         <ion-item-option (click)="addUpdatePortal(p)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>

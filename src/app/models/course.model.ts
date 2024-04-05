@@ -1,9 +1,9 @@
 export interface Course{
     id: string,
-    iduser: string,
+    idPortal: string,
     name: string,
     description: string,
-    duracion: string,
+    duration: string,
     status: string,
     modality: string,
     creationDate: string,

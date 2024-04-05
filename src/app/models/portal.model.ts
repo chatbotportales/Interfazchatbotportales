@@ -7,7 +7,7 @@ export interface Portal{
     image: string,
     saturdayEndTime: string,
     id: string,
-    iduser: string,
+    idUser: string,
     email: string,
     phone: string,
     url: string,
