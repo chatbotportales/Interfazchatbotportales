@@ -142,4 +142,8 @@ export class HomePage implements OnInit {
     this.router.navigate(['/main/course'], { queryParams: { id: id, name: name} });
   }
 
+  goToFrequentQuestion(id: string, name:string) {
+    this.router.navigate(['/main/frequent-questions'], { queryParams: { id: id, name: name} });
+  }
+
 }

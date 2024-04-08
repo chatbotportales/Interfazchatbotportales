@@ -1,4 +1,4 @@
-<app-header [showMenu]="true" title="Cursos"></app-header>
+<app-header [showMenu]="true" title="Preguntas Frecuentes"></app-header>
 
 <ion-content [fullscreen]="true">
 
@@ -6,29 +6,26 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card mode="ios" color="secondary" class="d-flex-center ion-text-center" *ngIf="!loading && courses.length" >
+  <ion-card mode="ios" color="secondary" class="d-flex-center ion-text-center" *ngIf="!loading && frequentQuestions.length" >
     <div>
       <h3>Portal: <strong>{{namePortal}}</strong></h3>
-      <h5>Cursos: {{courses.length}}</h5>
+      <h5>Preguntas Frecuentes: {{frequentQuestions.length}}</h5>
     </div>
   </ion-card>
 
   <ion-list *ngIf="!loading">
-    <ion-item-sliding class="product-item" *ngFor="let c of courses">
+    <ion-item-sliding class="product-item" *ngFor="let f of frequentQuestions">
       <ion-item>
         <ion-avatar slot="start">
-          <img src="assets/icon/course.svg" />
+          <img src="assets/icon/answer2.svg"/>
         </ion-avatar>
         <ion-label>
-          <div class="name">{{c.name}}</div>
+          <div class="name"><strong>Pregunta:</strong> {{f.ask}}</div>
           <div class="data">
-            <strong>Duracion:</strong> {{c.duration}}
+            <strong>Respuesta:</strong> {{f.answer}}
             <br>
-            <strong>Descripcion</strong> {{c.description}}
-            <br>
-            <strong>Modalidad</strong> {{c.modality}}
-            <br>
-            <strong>Prerequisitos</strong> {{c.prerequisites}}
+            <strong>url:</strong> <a href="{{f.url}}" target="_blank" rel="noopener noreferrer">{{f.url}}</a>
+
           </div>      
         </ion-label>
         <ion-icon class="option-btn" name="chevron-back-outline"></ion-icon>
@@ -36,11 +33,11 @@
 
       <ion-item-options>
 
-        <ion-item-option (click)="addUpdateCourse(c)">
+        <ion-item-option (click)="addUpdateFrequentQuestion(f)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>
         </ion-item-option>
 
-        <ion-item-option color="danger" (click)="ConfirmDeleteCourse(c)">
+        <ion-item-option color="danger" (click)="ConfirmDeleteFrequentQuestion(f)">
           <ion-icon class="option-btn" name="trash-outline"></ion-icon>
         </ion-item-option>
 
@@ -68,27 +65,28 @@
 
   </ion-list>
 
-  <div *ngIf="!loading && !courses.length" class="empty">
+  
+
+  <div *ngIf="!loading && !frequentQuestions.length" class="empty">
     <ion-card mode="ios" color="secondary" class="d-flex-center ion-text-center" >
       <div>
         <h3>Portal: <strong>{{namePortal}}</strong></h3>
-        <h5>Cursos: {{courses.length}}</h5>
+        <h5>Preguntas Frecuentes: {{frequentQuestions.length}}</h5>
       </div>
     </ion-card>
     <img src="assets/icon/robot.svg" class="shield-icon" height="100px">
-    <h3>No hay preguntas disponibles</h3>
+    <h3>No hay cursos preguntas frecuentes</h3>
   </div>
 
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="addUpdateCourse()">
+    <ion-fab-button (click)="addUpdateFrequentQuestion()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
+
   <ion-buttons class="ion-margin-top">
     <ion-back-button [defaultHref]="'/main/home'"></ion-back-button>
   </ion-buttons>
-
-
 </ion-content>

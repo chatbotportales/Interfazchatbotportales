@@ -1,0 +1,50 @@
+<app-header [isModal]="true" [title]="frequentQuestion ? 'Actualizar Pregunta' : 'Agregar Pregunta'"></app-header>
+
+<ion-content>
+
+  <form [formGroup]="form" class="ion-padding ion-text-center" (ngSubmit)="submit()" (keypress.enter)="submit()">
+    
+
+    <app-custom-input 
+    autocomplete="ask"
+    [control]="form.controls.ask"
+    type="text"
+    label="Pregunta"
+    ></app-custom-input>
+
+    <div class="validators" *ngIf="form.controls.ask.errors && form.controls.ask.touched">
+      <div *ngIf="form.controls.ask.errors?.['required']">La Pregunta es obligatoria</div>
+      <div *ngIf="form.controls.ask.errors?.['minlength']">Minimo 4 caracteres</div>
+    </div>
+
+    <app-custom-input 
+    autocomplete="answer"
+    [control]="form.controls.answer"
+    type="text"
+    label="Respuesta"
+    ></app-custom-input>
+
+    <div class="validators" *ngIf="form.controls.answer.errors && form.controls.answer.touched">
+      <div *ngIf="form.controls.answer.errors?.['required']">La Respuesta es obligatoria</div>
+    </div>
+
+    <app-custom-input 
+    autocomplete="url"
+    [control]="form.controls.url"
+    type="text"
+    label="Url"
+    ></app-custom-input>
+
+    <div class="validators" *ngIf="form.controls.url.errors && form.controls.url.touched">
+      <div *ngIf="form.controls.url.errors?.['required']">La Url es obligatoria</div>
+    </div>
+
+
+    <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form.invalid">
+     {{frequentQuestion ? 'Actualizar Pregunta' : 'Agregar Pregunta'}}
+      <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
+    
+  </form>
+
+</ion-content>

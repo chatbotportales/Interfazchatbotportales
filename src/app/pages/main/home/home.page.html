@@ -27,9 +27,21 @@
             <strong>Horarios Lunes a Viernes:</strong> {{p.mondayStartTime | date:'HH:mm' }} - {{p.mondayEndTime | date:'HH:mm' }}
             <strong>& Sabados:</strong> {{p.saturdayStartTime | date:'HH:mm' }} - {{p.saturdayEndTime | date:'HH:mm' }}
           </div>
-          <div (click)="goToCursos(p.id, p.name)">
-            <ion-chip color="primary" mode="ios" outline="true">Cursos</ion-chip>
-          </div>
+          <ion-row>
+            <ion-col size="auto">
+              <div (click)="goToCursos(p.id, p.name)">
+                <ion-chip color="primary" mode="ios" outline="true">Cursos</ion-chip>
+              </div>
+            </ion-col>
+            <ion-col size="auto">
+              <div (click)="goToFrequentQuestion(p.id, p.name)">
+                <ion-chip color="primary" mode="ios" outline="true">Preguntas Frecuentes</ion-chip>
+              </div>
+            </ion-col>
+          </ion-row>
+          
+          
+          
       
         </ion-label>
         <ion-icon *ngIf="p.idUser === user().uid" class="option-btn" name="chevron-back-outline"></ion-icon>
