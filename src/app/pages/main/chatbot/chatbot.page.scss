@@ -1,0 +1,34 @@
+
+#dynamicContentContainer {
+    z-index: 9999; /* Asigna el índice Z deseado */
+  }
+  
+h4{
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.avatar-icon{
+    font-size: 70px;
+}
+
+ion-item {
+    --padding-top: 14px;
+}
+
+ion-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  #centerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+  }
+  

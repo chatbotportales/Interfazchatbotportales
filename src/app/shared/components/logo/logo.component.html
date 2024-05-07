@@ -1,5 +1,6 @@
 <!--<ion-icon class="shield-icon" color="primary" name="shield-outline"></ion-icon>-->
 <img src="assets/icon/robot.svg" class="shield-icon" height="80px">
 <ion-text color="primary">
-  <h1>Admin<strong>ChatBot</strong></h1>
+  <h1 *ngIf="!text">Admin<strong>ChatBot</strong></h1>
+  <h1 *ngIf="text">{{ text }}</h1>
 </ion-text>

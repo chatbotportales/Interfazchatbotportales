@@ -24,7 +24,15 @@ const routes: Routes = [
         path: 'frequent-questions',
         loadChildren: () => import('./frequent-questions/frequent-questions.module').then( m => m.FrequentQuestionsPageModule)
       },
+      {
+        path: 'chatbot',
+        loadChildren: () => import('./chatbot/chatbot.module').then( m => m.ChatbotPageModule)
+      },
     ]
+  },
+  {
+    path: 'chatbot',
+    loadChildren: () => import('./chatbot/chatbot.module').then( m => m.ChatbotPageModule)
   },
   
   
