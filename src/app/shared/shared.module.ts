@@ -9,16 +9,18 @@ import { AddUpdatePortalComponent } from './components/add-update-portal/add-upd
 import { AddUpdateCourseComponent } from './components/add-update-course/add-update-course.component';
 import { AddUpdateFrequentQuestionComponent } from './components/add-update-frequent-question/add-update-frequent-question.component';
 
+import { CoursesModalComponent } from './components/courses-modal/courses-modal.component';
+import { FrequentquestionsModalComponent } from './components/frequentquestions-modal/frequentquestions-modal.component';
 
 
 @NgModule({
   declarations: [
     HeaderComponent,  CustomInputComponent, LogoComponent,
-    AddUpdatePortalComponent, AddUpdateCourseComponent, AddUpdateFrequentQuestionComponent
+    AddUpdatePortalComponent, AddUpdateCourseComponent, AddUpdateFrequentQuestionComponent, CoursesModalComponent, FrequentquestionsModalComponent
   ],
   exports: [
     HeaderComponent,  CustomInputComponent, LogoComponent, ReactiveFormsModule,
-    AddUpdatePortalComponent, AddUpdateCourseComponent, AddUpdateFrequentQuestionComponent
+    AddUpdatePortalComponent, AddUpdateCourseComponent, AddUpdateFrequentQuestionComponent, CoursesModalComponent, FrequentquestionsModalComponent
   ],
   imports: [
     CommonModule,

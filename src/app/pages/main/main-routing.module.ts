@@ -35,7 +35,6 @@ const routes: Routes = [
     loadChildren: () => import('./chatbot/chatbot.module').then( m => m.ChatbotPageModule)
   },
   
-  
 ];
 
 @NgModule({

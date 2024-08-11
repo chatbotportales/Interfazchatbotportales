@@ -14,7 +14,7 @@
   </ion-card>
 
   <ion-list *ngIf="!loading">
-    <ion-item-sliding class="product-item" *ngFor="let f of frequentQuestions">
+    <ion-item-sliding class="product-item" #slidingItem *ngFor="let f of frequentQuestions">
       <ion-item>
         <ion-avatar slot="start">
           <img src="assets/icon/answer2.svg"/>
@@ -28,7 +28,7 @@
 
           </div>      
         </ion-label>
-        <ion-icon class="option-btn" name="chevron-back-outline"></ion-icon>
+        <ion-icon class="option-btn" (click)="openOptions(slidingItem)" name="chevron-back-outline"></ion-icon>
       </ion-item>
 
       <ion-item-options>

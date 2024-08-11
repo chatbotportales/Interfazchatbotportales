@@ -7,6 +7,8 @@ import { AddUpdatePortalComponent } from 'src/app/shared/components/add-update-p
 import { orderBy } from 'firebase/firestore'
 import { Router, NavigationExtras } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { IonItemSliding } from '@ionic/angular';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -15,13 +17,95 @@ import { NavController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
+  @ViewChild('slidingItem', { static: false }) slidingItem: IonItemSliding;
+
+  openOptions(slidingItem: IonItemSliding) {
+    slidingItem.open('end'); // Abre las opciones desde el final (deslizar hacia la izquierda)
+  }
+
   firebaseSvc = inject(FirebaseService);
   utilsSvs = inject(UtilsService);
 
   portales: Portal[] = [];
   loading: boolean = false;
   idUser = ""
+
+  portalCourseCounts: { [key: string]: number } = {};
+  portalfrequentQuestionsCounts: { [key: string]: number } = {};
+
   ngOnInit() {
+    this.loadPortales();
+  }
+
+  async loadPortales() {
+    this.loading = true;
+    this.getPortales();
+  }
+
+  getPortales() {
+    //this.user().uid
+    let path = `portales`;
+
+    this.loading = true;
+
+    let query = [
+      orderBy('name', 'asc'),
+      //where('name','>','30'),
+    ];
+
+    let sub = this.firebaseSvc.getCollectionData(path, query).subscribe({
+      next: (res: any) => {
+        this.portales = res;
+        sub.unsubscribe();
+        this.updateCourseCounts();
+        this.updateFrequentQuestionsCounts();
+        this.loading = false;
+      }
+    });
+
+    
+  }
+
+  updateCourseCounts() {
+    if (this.portales.length) {
+      this.portales.forEach(portal => {
+        let path = `courses`;
+        let courses = null
+        let query = []
+    
+        let sub = this.firebaseSvc.getCollectionData(path, query).subscribe({
+          next: (res: any) => {
+            courses = res;
+            courses = res.filter((course: any) => {
+                return course.idPortal === portal.id;
+            });
+            sub.unsubscribe();
+            this.portalCourseCounts[portal.id] = courses.length;
+          }
+        })
+      });
+    }
+  }
+
+  updateFrequentQuestionsCounts() {
+    if (this.portales.length) {
+      this.portales.forEach(portal => {
+        let path = `frequentQuestions`;
+        let frequentQuestions = null
+        let query = []
+    
+        let sub = this.firebaseSvc.getCollectionData(path, query).subscribe({
+          next: (res: any) => {
+            frequentQuestions = res;
+            frequentQuestions = res.filter((course: any) => {
+                return course.idPortal === portal.id;
+            });
+            sub.unsubscribe();
+            this.portalfrequentQuestionsCounts[portal.id] = frequentQuestions.length;
+          }
+        })
+      });
+    }
   }
 
   user(): User{
@@ -59,7 +143,7 @@ export class HomePage implements OnInit {
   }
 
 
-  getPortales(){
+  getPortales2(){
     //this.user().uid
     let path = `portales`;
     
@@ -145,5 +229,6 @@ export class HomePage implements OnInit {
   goToFrequentQuestion(id: string, name:string) {
     this.router.navigate(['/main/frequent-questions'], { queryParams: { id: id, name: name} });
   }
+  
 
 }

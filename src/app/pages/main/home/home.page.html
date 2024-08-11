@@ -14,7 +14,7 @@
   </ion-card>
 
   <ion-list *ngIf="!loading">
-    <ion-item-sliding class="product-item" *ngFor="let p of portales">
+    <ion-item-sliding #slidingItem class="product-item" *ngFor="let p of portales">
       <ion-item>
         <ion-avatar slot="start">
           <img [src]="p.image" />
@@ -30,40 +30,30 @@
           <ion-row>
             <ion-col size="auto">
               <div (click)="goToCursos(p.id, p.name)">
-                <ion-chip color="primary" mode="ios" outline="true">Cursos</ion-chip>
+                <ion-chip color="primary" mode="ios" outline="true">Cursos ({{portalCourseCounts[p.id] || 0}})</ion-chip>
               </div>
             </ion-col>
             <ion-col size="auto">
               <div (click)="goToFrequentQuestion(p.id, p.name)">
-                <ion-chip color="primary" mode="ios" outline="true">Preguntas Frecuentes</ion-chip>
+                <ion-chip color="primary" mode="ios" outline="true">Preguntas Frecuentes ({{portalfrequentQuestionsCounts[p.id] || 0}})</ion-chip>
               </div>
             </ion-col>
           </ion-row>
-          
-          
-          
-      
         </ion-label>
-        <ion-icon *ngIf="p.idUser === user().uid" class="option-btn" name="chevron-back-outline"></ion-icon>
+        <ion-icon *ngIf="p.idUser === user().uid" (click)="openOptions(slidingItem)" class="option-btn" name="chevron-back-outline"></ion-icon>
       </ion-item>
-
-      <ion-item-options *ngIf="p.idUser === user().uid">
-
+      <ion-item-options>
         <ion-item-option (click)="addUpdatePortal(p)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>
         </ion-item-option>
-
         <ion-item-option color="danger" (click)="ConfirmDeletePortal(p)">
           <ion-icon class="option-btn" name="trash-outline"></ion-icon>
         </ion-item-option>
-
-
       </ion-item-options>
-
-
-
+    
     </ion-item-sliding>
   </ion-list>
+  
 
   <!--loade-->
   <ion-list *ngIf="loading">

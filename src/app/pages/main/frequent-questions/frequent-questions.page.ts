@@ -7,6 +7,8 @@ import { orderBy, where } from 'firebase/firestore'
 import { FrequentQuestion } from 'src/app/models/frequentQuestion.model';
 import { ActivatedRoute } from '@angular/router';
 import { AddUpdateFrequentQuestionComponent } from 'src/app/shared/components/add-update-frequent-question/add-update-frequent-question.component';
+import { IonItemSliding } from '@ionic/angular';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-frequent-questions',
@@ -14,6 +16,12 @@ import { AddUpdateFrequentQuestionComponent } from 'src/app/shared/components/ad
   styleUrls: ['./frequent-questions.page.scss'],
 })
 export class FrequentQuestionsPage implements OnInit {
+
+  @ViewChild('slidingItem', { static: false }) slidingItem: IonItemSliding;
+
+  openOptions(slidingItem: IonItemSliding) {
+    slidingItem.open('end'); // Abre las opciones desde el final (deslizar hacia la izquierda)
+  }
 
   firebaseSvc = inject(FirebaseService);
   utilsSvs = inject(UtilsService);

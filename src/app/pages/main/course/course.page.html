@@ -14,7 +14,7 @@
   </ion-card>
 
   <ion-list *ngIf="!loading">
-    <ion-item-sliding class="product-item" *ngFor="let c of courses">
+    <ion-item-sliding  #slidingItem class="product-item" *ngFor="let c of courses">
       <ion-item>
         <ion-avatar slot="start">
           <img src="assets/icon/course.svg" />
@@ -31,7 +31,7 @@
             <strong>Prerequisitos</strong> {{c.prerequisites}}
           </div>      
         </ion-label>
-        <ion-icon class="option-btn" name="chevron-back-outline"></ion-icon>
+        <ion-icon class="option-btn" (click)="openOptions(slidingItem)" name="chevron-back-outline"></ion-icon>
       </ion-item>
 
       <ion-item-options>

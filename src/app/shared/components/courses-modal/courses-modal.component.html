@@ -1,0 +1,22 @@
+<app-header [isModal]="true" [title]="'Curso: ' + portalName"></app-header>
+
+<ion-content>
+  <ion-accordion-group>
+    <ion-accordion *ngFor="let course of courses" value="{{course.id}}">
+      <ion-item slot="header">
+        <ion-label>{{ course.name }}</ion-label>
+        
+      </ion-item>
+
+      <ion-item slot="content">
+        <ion-label>
+          <p><strong>Descripción:</strong> {{ course.description }}</p>
+          <p><strong>Duración:</strong> {{ course.duration }}</p>
+          <p><strong>Estado:</strong> {{ course.status }}</p>
+          <p><strong>Modalidad:</strong> {{ course.modality }}</p>
+          <p><strong>Requisitos:</strong> {{ course.prerequisites }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-content>

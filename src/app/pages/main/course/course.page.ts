@@ -7,6 +7,8 @@ import { orderBy, where } from 'firebase/firestore'
 import { Course } from 'src/app/models/course.model';
 import { ActivatedRoute } from '@angular/router';
 import { AddUpdateCourseComponent } from 'src/app/shared/components/add-update-course/add-update-course.component';
+import { IonItemSliding } from '@ionic/angular';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-course',
@@ -14,6 +16,12 @@ import { AddUpdateCourseComponent } from 'src/app/shared/components/add-update-c
   styleUrls: ['./course.page.scss'],
 })
 export class CoursePage implements OnInit {
+
+  @ViewChild('slidingItem', { static: false }) slidingItem: IonItemSliding;
+
+  openOptions(slidingItem: IonItemSliding) {
+    slidingItem.open('end'); // Abre las opciones desde el final (deslizar hacia la izquierda)
+  }
 
   firebaseSvc = inject(FirebaseService);
   utilsSvs = inject(UtilsService);

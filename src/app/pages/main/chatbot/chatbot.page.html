@@ -1,22 +1,93 @@
-<app-header [showMenu]="true" title="Chatbot"></app-header>
+<app-header [showMenu]="true" title="Chatbot Portales"></app-header>
+
+<div id="dynamicContentContainer" ></div>
+
 
 <ion-content [fullscreen]="true">
-   
-  <div class="d-flex-center">
-
-    
-
-    <form class="auth-form">
-      <ion-card-content>
-        <ion-text color="primary">
-          <h1>Hola!</h1>
-        </ion-text>
-      </ion-card-content>
-    <app-logo text="Bienvenidos"></app-logo> 
-  </form> 
-  </div>
   
+  <div class="content-container">
+    <div class="d-flex-center">
+      <form class="auth-form">
+        <ion-card-content>
+          <ion-text color="primary">
+            <h1>Hola!</h1>
+          </ion-text>
+        </ion-card-content>
+        <app-logo text="Bienvenidos"></app-logo>
+      </form>
+    </div>
+    <ion-list *ngIf="!loading">
+    
+    <ion-accordion-group>
+      <!-- Acordeón principal para cada portal -->
+      <ion-accordion *ngFor="let portal of portales" value="{{portal.id}}">
+        <ion-item slot="header">
+          <ion-avatar slot="start">
+            <img [src]="portal.image" />
+          </ion-avatar>
+          <ion-label class="selectable-text">{{portal.name}}</ion-label>
+        </ion-item>
+
+        <ion-item slot="content">
+          <ion-label class="selectable-text">
+            <p><strong>Dirección:</strong> {{portal.address}}</p>
+            <p><strong>Horarios:</strong> Lunes a Viernes {{portal.mondayStartTime | date:'HH:mm'}} - {{portal.mondayEndTime | date:'HH:mm'}}, Sábados {{portal.saturdayStartTime | date:'HH:mm'}} - {{portal.saturdayEndTime | date:'HH:mm'}}</p>
+            <p *ngIf="portal.email" ><strong>Correo:</strong> {{portal.email}}</p>
+            <p *ngIf="portal.phone" ><strong>Telefono:</strong> {{portal.phone}}</p>
+            <!-- Contenedor de botones en columnas horizontales -->
+            <div class="button-row">
+              <!-- Botón para abrir los cursos -->
+              <ion-button expand="full" (click)="openCoursesModal(portal)" color="danger">
+                Ver Cursos ({{portalCourseCounts[portal.id] || 0}})
+              </ion-button>
+
+              <!-- Botón de prueba -->
+              <ion-button expand="full" (click)="openportalFrequentQuestionsModal(portal)" color="danger">
+                Ver Preguntas frecuentes ({{portalFrequentQuestionsCounts[portal.id] || 0}})
+              </ion-button>
+
+              <ion-button expand="full" *ngIf="portal.url" (click)="openPortalWebsite(portal.url)">
+                Ir a la Página del Portal
+              </ion-button>
+            </div>
+
+            <!-- Mapa -->
+            <div class="map-container">
+              <div *ngIf="sanitizedMapUrls[portal.id]">
+                <div [innerHTML]="sanitizedMapUrls[portal.id]"></div>
+                <ion-button expand="full" (click)="openMapInNewTab(portal.id)">
+                  Ver en Google Maps
+                </ion-button>
+              </div>
+            </div>
+          </ion-label>
+        </ion-item>
+      </ion-accordion>
+    </ion-accordion-group>
+  </ion-list>
+  
+
+  <!--loade-->
+  <ion-list *ngIf="loading">
+
+    <ion-accordion-group>
+      <!-- Acordeón principal para cada portal -->
+      <ion-accordion *ngFor="let p of [1,1,1,1,1,1,1,]">
+        <ion-item slot="header">
+          <ion-avatar slot="start">
+            <ion-skeleton-text animated style="width: 100%; height: 100%;"></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label class="selectable-text"><div> <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text> </div></ion-label>
+          
+        </ion-item>
+        </ion-accordion>
+      </ion-accordion-group>
+
+  </ion-list>
+
+<div *ngIf="!loading && !portales.length" class="empty">
+<h3>No hay portales disponibles</h3>
+</div>
+
+</div>
 </ion-content>
-
-<div id="dynamicContentContainer"></div>
-

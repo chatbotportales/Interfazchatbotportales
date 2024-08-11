@@ -3,3 +3,6 @@ ionic serve
 ionic g c shared/components/add-update-portal
 
 ionic g page pages/main/course               
+
+
+ionic build
