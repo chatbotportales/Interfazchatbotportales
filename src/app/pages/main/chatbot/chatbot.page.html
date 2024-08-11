@@ -1,16 +1,48 @@
 <app-header [showMenu]="true" title="Chatbot Portales"></app-header>
 
+
+
 <div id="dynamicContentContainer" ></div>
 
 
 <ion-content [fullscreen]="true">
-  
-  <div class="content-container">
+
+  <ion-button 
+  [ngClass]="{'pressed': isRecording}"
+  (mousedown)="startVoiceRecognition()" 
+  (mouseup)="stopVoiceRecognition()" 
+  (mouseleave)="stopVoiceRecognition()"
+  expand="full" 
+  color="primary">
+  <ion-icon 
+      slot="start" 
+      [name]="!isRecording ? 'mic-off' : 'mic'"></ion-icon>
+  Mantenga presionado para Iniciar Búsqueda por Voz
+</ion-button>
+
+
+    <div class="d-flex-center" *ngIf="lastFoundPortal">
+      <form class="auth-form">
+        <ion-card-content>
+          <ion-text color="primary">
+            <p >Se encontro segun tu busqueda: {{lastFoundPortal.name}}</p>
+            <ion-button (click)="openPortalModal()" color="danger">
+              Ver Portal
+            </ion-button>
+           
+          </ion-text>
+        </ion-card-content>
+      </form>
+    </div>
+
+
+  <div class="content-container" #contentcontainer>
     <div class="d-flex-center">
       <form class="auth-form">
         <ion-card-content>
           <ion-text color="primary">
             <h1>Hola!</h1>
+           
           </ion-text>
         </ion-card-content>
         <app-logo text="Bienvenidos"></app-logo>
@@ -20,7 +52,8 @@
     
     <ion-accordion-group>
       <!-- Acordeón principal para cada portal -->
-      <ion-accordion *ngFor="let portal of portales" value="{{portal.id}}">
+      
+      <ion-accordion *ngFor="let portal of portales" value="{{portal.id}}" id="{{portal.id}}">
         <ion-item slot="header">
           <ion-avatar slot="start">
             <img [src]="portal.image" />
@@ -90,4 +123,8 @@
 </div>
 
 </div>
+<br>
+<br>
+<br>
+<br>
 </ion-content>

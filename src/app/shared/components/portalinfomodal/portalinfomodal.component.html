@@ -1,0 +1,56 @@
+<app-header [isModal]="true" [title]="'Información:'+ portal.name"></app-header>
+
+<ion-content>
+
+  <ion-accordion-group [value]="['mi213',]">
+    <!-- Acordeón principal para cada portal -->
+    
+    <ion-accordion value="mi213">
+      <ion-item slot="header">
+        <ion-avatar slot="start">
+          <img [src]="portal.image" />
+        </ion-avatar>
+        <ion-label class="selectable-text">{{portal.name}}</ion-label>
+      </ion-item>
+
+      <ion-item slot="content">
+        <ion-label class="selectable-text">
+          <p><strong>Dirección:</strong> {{portal.address}}</p>
+          <p><strong>Horarios:</strong> Lunes a Viernes {{portal.mondayStartTime | date:'HH:mm'}} - {{portal.mondayEndTime | date:'HH:mm'}}, Sábados {{portal.saturdayStartTime | date:'HH:mm'}} - {{portal.saturdayEndTime | date:'HH:mm'}}</p>
+          <p *ngIf="portal.email" ><strong>Correo:</strong> {{portal.email}}</p>
+          <p *ngIf="portal.phone" ><strong>Telefono:</strong> {{portal.phone}}</p>
+          <!-- Contenedor de botones en columnas horizontales -->
+          <div class="button-row">
+            <!-- Botón para abrir los cursos -->
+            <ion-button expand="full" (click)="openCoursesModal()" color="danger">
+              Ver Cursos ({{courses.length || 0}})
+            </ion-button>
+
+            <!-- Botón de prueba -->
+            <ion-button expand="full" (click)="openportalFrequentQuestionsModal()" color="danger">
+              Ver Preguntas frecuentes ({{frequentquestions.length || 0}})
+            </ion-button>
+
+            <ion-button expand="full" *ngIf="portal.url" (click)="openPortalWebsite(portal.url)">
+              Ir a la Página del Portal
+            </ion-button>
+          </div>
+
+          <!-- Mapa -->
+          <div class="map-container">
+            <div *ngIf="sanitizedMapUrls[portal.id]">
+              <div [innerHTML]="sanitizedMapUrls[portal.id]"></div>
+              <ion-button expand="full" (click)="openMapInNewTab(portal.id)">
+                Ver en Google Maps
+              </ion-button>
+            </div>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-accordion>
+  </ion-accordion-group>
+  
+
+</ion-content>
+
+

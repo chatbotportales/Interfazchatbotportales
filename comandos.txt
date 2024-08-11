@@ -6,3 +6,5 @@ ionic g page pages/main/course
 
 
 ionic build
+
+firebase deploy
