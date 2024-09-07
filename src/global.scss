@@ -120,16 +120,26 @@ ion-button {
     }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 951px) {
     .auth-form {
         width: 500px;
     }
 
     .add-update-modal {
-        --height: 600px;
+        --height: 610px;
     }
 }
 
+@media (min-width: 769px) and (max-width: 950px) {
+    
+    .add-update-modal {
+      --height: 800px; /* Altura del modal para pantallas medianas */
+    }
+  }
+
+.add-update-modal {
+  --border-radius: 10px;
+  }
 /* styles.scss */
 ion-content, ion-label, ion-item, ion-card-content {
     user-select: text !important; /* Asegúrate de que la selección de texto esté permitida */

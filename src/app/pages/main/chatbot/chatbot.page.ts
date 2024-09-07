@@ -9,6 +9,7 @@ import { NavController } from '@ionic/angular';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FrequentquestionsModalComponent } from 'src/app/shared/components/frequentquestions-modal/frequentquestions-modal.component';
 import { PortalinfomodalComponent } from 'src/app/shared/components/portalinfomodal/portalinfomodal.component';
+import { DialogflowModalComponent } from 'src/app/shared/components/dialogflow-modal/dialogflow-modal.component';
 
 @Component({
   selector: 'app-chatbot',
@@ -62,57 +63,7 @@ export class ChatbotPage implements OnInit {
   
   ngOnInit() {
     this.loadPortales();
-    this.setupVoiceRecognition();
-    const htmlContent = `
-      <div>
-      
-      <df-messenger
-        project-id="chatbot-portales-v3"
-        agent-id="acfe22ea-dff0-4dc8-b812-74c36a786687"
-        language-code="es"
-        max-query-length="-1">
-        <df-messenger-chat-bubble
-         chat-title="ChatBot Portales Interactivos Ciudad Bolivar">
-        </df-messenger-chat-bubble>
-      </df-messenger>
-      <style>
-      df-messenger {
-        z-index: 999;
-        position: fixed;
-        bottom: 16px;
-        right: 16px;
-       
-        border-radius: 50px; /* Bordes redondeados */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave para profundidad */
-        background-color: #ffffff; /* Fondo blanco para el chatbot */
-        --df-messenger-font-color: #333333; /* Color del texto */
-        --df-messenger-font-family: 'Roboto', sans-serif; /* Fuente del chatbot */
-        --df-messenger-chat-background: #f9f9f9; /* Fondo del área de chat */
-        --df-messenger-message-user-background: #e1f5fe; /* Fondo de mensajes del usuario */
-        --df-messenger-message-bot-background: #ffffff; /* Fondo de mensajes del bot */
-        border: 2px solid #007bff; /* Borde azul para destacar */
-      }        
-      </style>
-      </div>
-    `;
-    // Insertar el HTML en el contenedor dinámico
-    const dynamicContentContainer = document.getElementById('dynamicContentContainer');
-    dynamicContentContainer.innerHTML = htmlContent;
-    // Ejecutar scripts presentes en el HTML
-    const scripts = dynamicContentContainer.querySelectorAll('script');
-    scripts.forEach(script => {
-      const scriptElement = document.createElement('script');
-      scriptElement.innerHTML = script.innerHTML;
-      dynamicContentContainer.appendChild(scriptElement);
-    });
-    // Aplicar estilos CSS presentes en el HTML
-    const styles = dynamicContentContainer.querySelectorAll('style');
-    styles.forEach(style => {
-      const styleElement = document.createElement('style');
-      styleElement.innerHTML = style.innerHTML;
-      dynamicContentContainer.appendChild(styleElement);
-    });
-  }
+    this.setupVoiceRecognition();  }
 
   async loadPortales() {
     this.loading = true;
@@ -194,11 +145,22 @@ export class ChatbotPage implements OnInit {
   async openCoursesModal(portal: any) {
     const modal = await this.utilsSvs.presentModal({
       component: CoursesModalComponent,
-      cssClass: 'add-update-modal',
+      cssClass: 'add-update-modal2',
       componentProps: { 
         portalId: portal.id,
         portalName: portal.name,
         courses: this.getCoursesByPortal(portal.id) // Asegúrate de pasar los cursos
+      }
+    });
+    //return await modal.present();
+  }
+
+  async openChatbotModal() {
+    const modal = await this.utilsSvs.presentModal({
+      component: DialogflowModalComponent,
+      cssClass: 'add-update-modal',
+      componentProps: { 
+       
       }
     });
     //return await modal.present();

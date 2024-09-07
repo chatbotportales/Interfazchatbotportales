@@ -12,18 +12,18 @@ import { AddUpdateFrequentQuestionComponent } from './components/add-update-freq
 import { CoursesModalComponent } from './components/courses-modal/courses-modal.component';
 import { FrequentquestionsModalComponent } from './components/frequentquestions-modal/frequentquestions-modal.component';
 import { PortalinfomodalComponent } from './components/portalinfomodal/portalinfomodal.component';
-
+import { DialogflowModalComponent } from './components/dialogflow-modal/dialogflow-modal.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,  CustomInputComponent, LogoComponent,
     AddUpdatePortalComponent, AddUpdateCourseComponent, AddUpdateFrequentQuestionComponent, 
-    CoursesModalComponent, FrequentquestionsModalComponent, PortalinfomodalComponent
+    CoursesModalComponent, FrequentquestionsModalComponent, PortalinfomodalComponent, DialogflowModalComponent
   ],
   exports: [
     HeaderComponent,  CustomInputComponent, LogoComponent, ReactiveFormsModule,
     AddUpdatePortalComponent, AddUpdateCourseComponent, AddUpdateFrequentQuestionComponent, 
-    CoursesModalComponent, FrequentquestionsModalComponent, PortalinfomodalComponent
+    CoursesModalComponent, FrequentquestionsModalComponent, PortalinfomodalComponent, DialogflowModalComponent
   ],
   imports: [
     CommonModule,

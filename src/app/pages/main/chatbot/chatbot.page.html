@@ -2,51 +2,59 @@
 
 
 
-<div id="dynamicContentContainer" ></div>
-
-
 <ion-content [fullscreen]="true">
 
-  <ion-button 
-  [ngClass]="{'pressed': isRecording}"
-  (mousedown)="startVoiceRecognition()" 
-  (mouseup)="stopVoiceRecognition()" 
-  (mouseleave)="stopVoiceRecognition()"
-  expand="full" 
-  color="primary">
-  <ion-icon 
-      slot="start" 
-      [name]="!isRecording ? 'mic-off' : 'mic'"></ion-icon>
-  Mantenga presionado para Iniciar Búsqueda por Voz
-</ion-button>
-
-
-    <div class="d-flex-center" *ngIf="lastFoundPortal">
-      <form class="auth-form">
-        <ion-card-content>
-          <ion-text color="primary">
-            <p >Se encontro segun tu busqueda: {{lastFoundPortal.name}}</p>
-            <ion-button (click)="openPortalModal()" color="danger">
-              Ver Portal
-            </ion-button>
-           
-          </ion-text>
-        </ion-card-content>
-      </form>
-    </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="danger" (click)="openChatbotModal()">
+      <ion-icon name="chatbubbles"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  
 
 
   <div class="content-container" #contentcontainer>
     <div class="d-flex-center">
+      
       <form class="auth-form">
         <ion-card-content>
           <ion-text color="primary">
             <h1>Hola!</h1>
-           
           </ion-text>
         </ion-card-content>
         <app-logo text="Bienvenidos"></app-logo>
+    
+        <!-- Contenedor para el botón y el texto -->
+        <div class="button-container">
+          <ion-button 
+            class="round-button"
+            [ngClass]="{'pressed': isRecording}"
+            (mousedown)="startVoiceRecognition()" 
+            (mouseup)="stopVoiceRecognition()" 
+            (mouseleave)="stopVoiceRecognition()"
+            color="primary">
+            <ion-icon 
+                [name]="!isRecording ? 'mic-off' : 'mic'"></ion-icon>
+          </ion-button>
+          <!-- Mostrar el texto cuando se oprime el botón -->
+          <div *ngIf="isRecording" class="recording-text">
+            <p>Escuchando...</p>
+          </div>
+        </div>
+    
+        <div class="d-flex-center" *ngIf="lastFoundPortal">
+          <form class="auth-form">
+            <ion-card-content>
+              <ion-text color="primary">
+                <p>Se encontró según tu búsqueda: {{lastFoundPortal.name}}</p>
+                <ion-button (click)="openPortalModal()" color="danger">
+                  Ver Portal
+                </ion-button>
+              </ion-text>
+            </ion-card-content>
+          </form>
+        </div>
       </form>
+
     </div>
     <ion-list *ngIf="!loading">
     
