@@ -1,7 +1,11 @@
-<app-header [isModal]="true" [title]="'ChatBot'"></app-header>
-
 <ion-content>
   <div #scrollContainer class="modal-content">
-    <div id="dynamicContentContainer" ></div>
+    <!-- Contenedor para el contenido dinámico -->
+    <div id="dynamicContentContainer"></div>
+
+    <!-- Botón de cierre flotante -->
+    <button (click)="dismiss()" class="close-button">
+      <ion-icon name="close"></ion-icon>
+    </button>
   </div>
 </ion-content>

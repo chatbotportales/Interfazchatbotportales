@@ -16,15 +16,35 @@ export class DialogflowModalComponent  implements OnInit {
 
   ngOnInit() {
     const htmlContent = `
-      <div>      
-      <iframe
-          allow="microphone;"
-          width="100%"
-          height="600"
-          intent="WELCOME"
-          src="https://console.dialogflow.com/api-client/demo/embedded/53497ddd-2517-4741-ad58-53a74e440bb8">
-      </iframe>
-      
+      <div>
+
+      <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+      <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+      <df-messenger
+        project-id="portalbotcb"
+        agent-id="f761968c-5cfc-4b45-9b4b-aeba5d86724b"
+        language-code="es"
+        max-query-length="-1">
+        <df-messenger-chat
+        chat-title="PortalBot CB">
+        </df-messenger-chat>
+      </df-messenger>
+      <style>
+        df-messenger {
+          z-index: 999;
+          position: fixed;
+          --df-messenger-font-color: #000;
+          --df-messenger-font-family: Google Sans;
+          --df-messenger-chat-background: #f3f6fc;
+          --df-messenger-message-user-background: #d3e3fd;
+          --df-messenger-message-bot-background: #fff;
+          bottom: 0;
+          right: 0;
+          top: 0;
+          width: 100%;
+        }
+      </style>
+
       </div>
     `;
     // Insertar el HTML en el contenedor dinámico

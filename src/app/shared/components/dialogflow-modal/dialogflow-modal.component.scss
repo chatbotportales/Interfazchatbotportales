@@ -1,9 +1,25 @@
-.add-update-modal {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .add-update-modal {
-    flex: 1;
-    overflow-y: auto;
-  }
+.modal-content {
+  position: relative;
+  padding: 16px; // Ajusta el padding según tus necesidades
+}
+
+#dynamicContentContainer {
+  // Agrega estilos adicionales para el contenedor dinámico si es necesario
+}
+
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: #fff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  padding: 8px;
+  cursor: pointer;
+  z-index: 1000; // Asegúrate de que el botón esté por encima del contenido
+}
+
+.close-button ion-icon {
+  font-size: 24px;
+}
