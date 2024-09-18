@@ -1,11 +1,30 @@
-<ion-content>
-  <div #scrollContainer class="modal-content">
-    <!-- Contenedor para el contenido dinámico -->
-    <div id="dynamicContentContainer"></div>
+<div #scrollContainer class="modal-content">
+  <!-- Contenedor para el contenido dinámico -->
+  <div id="dynamicContentContainer"></div>
 
-    <!-- Botón de cierre flotante -->
-    <button (click)="dismiss()" class="close-button">
-      <ion-icon name="close"></ion-icon>
-    </button>
+  <!-- Botón de cierre flotante -->
+  <button (click)="dismiss()" class="close-button">
+    <ion-icon name="close"></ion-icon>
+  </button>
+
+  <!-- Botón de grabación -->
+  <!-- Botón de grabación -->
+  <div *ngIf="isSupported">
+  <div class="record-container">
+    <button id="recordButton" class="record-button"
+    (click)="toggleVoiceRecognition()"
+    [ngClass]="{'recording': isRecording, '': !isRecording}"
+    >
+
+    <ion-icon [name]="!isRecording ? 'mic-off' : 'mic'"></ion-icon>
+  </button>
+    <!-- Mensaje de cancelación -->
+    <div id="cancelPrompt" class="cancel-prompt" *ngIf="isRecording" (click)="cancelVoiceRecognition()">X</div>
   </div>
-</ion-content>
+
+  <!-- Burbuja flotante para mostrar texto en tiempo real -->
+  <div class="speech-bubble" *ngIf="isRecording">
+    {{ currentTranscript }}...
+  </div>
+  </div>
+</div>

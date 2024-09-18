@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore'; 
+import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { CoursesModalComponent } from 'src/app/shared/components/courses-modal/courses-modal.component';
 import { UtilsService } from 'src/app/services/utils.service';
 import { NavController } from '@ionic/angular';
@@ -20,8 +20,9 @@ export class ChatbotPage implements OnInit {
   portalCourses: any[] = [];
   portalFrequentQuestions: any[] = [];
   portales: any[] = [];
-  
+
   isRecording = false;
+  isSupported = true;
 
   portalCourseCounts: { [key: string]: number } = {};
   portalFrequentQuestionsCounts: { [key: string]: number } = {};
@@ -42,7 +43,7 @@ export class ChatbotPage implements OnInit {
 
   expandedPortalId: string | null = null; // Variable para controlar el estado expandido
   selectedPortalId: string | null = null; // Variable para controlar el estado de selección
- 
+
   constructor(private navCtrl: NavController, private router: Router, private cdr: ChangeDetectorRef) {}
 
   startVoiceRecognition(): void {
@@ -60,7 +61,7 @@ export class ChatbotPage implements OnInit {
       console.log('Deteniendo grabación...');
     }
   }
-  
+
   ngOnInit() {
     this.loadPortales();
     this.setupVoiceRecognition();  }
@@ -103,7 +104,7 @@ export class ChatbotPage implements OnInit {
       this.portales.forEach(portal => {
         let path = `courses`;
         let query = [
-          where('idPortal', '==', portal.id), 
+          where('idPortal', '==', portal.id),
           where('status', '==', 'activo')];
 
         this.firebaseSvc.getCollectionData(path, query).subscribe({
@@ -146,7 +147,7 @@ export class ChatbotPage implements OnInit {
     const modal = await this.utilsSvs.presentModal({
       component: CoursesModalComponent,
       cssClass: 'add-update-modal2',
-      componentProps: { 
+      componentProps: {
         portalId: portal.id,
         portalName: portal.name,
         courses: this.getCoursesByPortal(portal.id) // Asegúrate de pasar los cursos
@@ -159,8 +160,8 @@ export class ChatbotPage implements OnInit {
     const modal = await this.utilsSvs.presentModal({
       component: DialogflowModalComponent,
       cssClass: 'add-update-modal',
-      componentProps: { 
-       
+      componentProps: {
+
       }
     });
     //return await modal.present();
@@ -170,7 +171,7 @@ export class ChatbotPage implements OnInit {
     const modal = await this.utilsSvs.presentModal({
       component: PortalinfomodalComponent,
       cssClass: 'add-update-modal',
-      componentProps: { 
+      componentProps: {
         portal: this.lastFoundPortal,
         frequentquestions: this.getFrequentQuestionsByPortal(this.lastFoundPortal.id),
         courses: this.getCoursesByPortal(this.lastFoundPortal.id) // Asegúrate de pasar los cursos
@@ -183,7 +184,7 @@ export class ChatbotPage implements OnInit {
     const modal = await this.utilsSvs.presentModal({
       component: FrequentquestionsModalComponent,
       cssClass: 'add-update-modal',
-      componentProps: { 
+      componentProps: {
         portalId: portal.id,
         portalName: portal.name,
         frequentquestions: this.getFrequentQuestionsByPortal(portal.id) // Asegúrate de pasar los cursos
@@ -234,6 +235,7 @@ export class ChatbotPage implements OnInit {
         this.isRecognizing = false; // Actualiza el estado
       };
     } else {
+      this.isSupported = false;
       console.log('Speech recognition is not supported in this browser.');
     }
   }
@@ -254,10 +256,10 @@ export class ChatbotPage implements OnInit {
   processVoiceCommand(command: string): void {
     // Normaliza el comando a minúsculas para la comparación
     const lowerCaseCommand = command.toLowerCase().trim();
-    
+
     // Extrae el nombre del portal
     const portalName = this.extractPortalName(lowerCaseCommand);
-  
+
     if (lowerCaseCommand.includes('cursos')) {
       // Si se menciona "cursos", abre el modal para el portal
       this.handlePortalAction(portalName, 'cursos');
@@ -271,7 +273,7 @@ export class ChatbotPage implements OnInit {
       console.log('No se encontró ninguna acción para el comando.');
     }
   }
-  
+
   // Función para manejar acciones según el comando
   handlePortalAction(portalName: string | null, action: 'cursos' | 'preguntas frecuentes'): void {
     // Usa el último portal encontrado si no se proporciona un nombre
@@ -280,7 +282,7 @@ export class ChatbotPage implements OnInit {
     if (portal) {
       this.lastFoundPortal = portal;
       this.cdr.detectChanges();
-      
+
       console.log(`Portal encontrado: ${portal.name}`);
       if (action === 'cursos') {
         this.openCoursesModal(portal);
@@ -288,36 +290,36 @@ export class ChatbotPage implements OnInit {
         this.openportalFrequentQuestionsModal(portal);
       }
       // Actualiza el último portal encontrado
-      
+
     } else {
       console.log('No se encontró ningún portal con un nombre similar.');
     }
   }
-  
+
   // Función para encontrar el portal más cercano basado en el nombre
   findClosestPortal(portalName: string): any | null {
     if (!this.portales || this.portales.length === 0) {
       console.log('No hay portales disponibles.');
       return null;
     }
-  
+
     let closestPortal = null;
     let smallestDistance = Infinity;
-  
+
     this.portales.forEach(portal => {
       // Normalizar nombres para comparación
       const portalNameNormalized = portal.name.toLowerCase().trim();
       const distance = this.getLevenshteinDistance(portalNameNormalized, portalName.toLowerCase());
-      
+
       if (distance < smallestDistance) {
         smallestDistance = distance;
         closestPortal = portal;
       }
     });
-  
+
     return closestPortal;
   }
-  
+
   // Función para extraer el nombre del portal del comando
   extractPortalName(command: string): string | null {
     // Lista de frases comunes que no son parte del nombre del portal
@@ -331,29 +333,29 @@ export class ChatbotPage implements OnInit {
       'un',
       'una'
     ];
-  
+
     let extractedName = command;
     phrasesToRemove.forEach(phrase => {
       // Reemplaza las frases comunes
       extractedName = extractedName.replace(new RegExp(phrase, 'g'), '').trim();
     });
-  
+
     // Limpia espacios adicionales
     extractedName = extractedName.replace(/\s\s+/g, ' ');
-  
+
     return extractedName || null;
   }
-  
+
   // Implementación del algoritmo de Levenshtein (simplificado)
   getLevenshteinDistance(a: string, b: string): number {
     const aLength = a.length;
     const bLength = b.length;
     const matrix = Array.from({ length: aLength + 1 }, (_, i) => Array(bLength + 1).fill(i));
-  
+
     for (let j = 1; j <= bLength; j++) {
       matrix[0][j] = j;
     }
-  
+
     for (let i = 1; i <= aLength; i++) {
       for (let j = 1; j <= bLength; j++) {
         const cost = a[i - 1] === b[j - 1] ? 0 : 1;
@@ -364,23 +366,23 @@ export class ChatbotPage implements OnInit {
         );
       }
     }
-  
+
     return matrix[aLength][bLength];
   }
   //----------------------
-  
-  
-  
+
+
+
   // La función de búsqueda ya no necesita cambios
   searchPortalInformation(portalName: string): void {
     if (!this.portales || this.portales.length === 0) {
       console.log('No hay portales disponibles.');
       return;
     }
-  
+
     let closestPortal = null;
     let smallestDistance = Infinity;
-  
+
     this.portales.forEach(portal => {
       const distance = this.getLevenshteinDistance(portal.name.toLowerCase(), portalName.toLowerCase());
       if (distance < smallestDistance) {
@@ -388,22 +390,22 @@ export class ChatbotPage implements OnInit {
         closestPortal = portal;
       }
     });
-  
+
     if (closestPortal) {
-      
+
       console.log('Portal encontrado..:', closestPortal);
       this.openPortalAccordion(closestPortal.id);
       this.lastFoundPortal = closestPortal;
       this.cdr.detectChanges();
       this.selectedPortalId = closestPortal.id; // Marca el portal como seleccionado
-      
+
       this.openPortalModal();
     } else {
       console.log('No se encontró ningún portal con un nombre similar.');
     }
   }
-  
-  
+
+
   openPortalAccordion(portalId: string): void {
     // Encuentra el acordeón correspondiente en el DOM
     const accordionElement = document.getElementById(`${portalId}`);
@@ -417,7 +419,7 @@ export class ChatbotPage implements OnInit {
     } else {
       console.log(`No se encontró el acordeón para el portal ID ${portalId}.`);
     }
-  }  
+  }
 
   async openCoursesModalForPortal() {
     const portal = this.portales.find(p => p.id === this.selectedPortalId);
@@ -427,7 +429,7 @@ export class ChatbotPage implements OnInit {
       console.log('No se encontró el portal seleccionado.');
     }
   }
-  
+
   async openFrequentQuestionsModalForPortal() {
     const portal = this.portales.find(p => p.id === this.selectedPortalId);
     if (portal) {

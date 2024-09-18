@@ -9,12 +9,12 @@
       <ion-icon name="chatbubbles"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  
+
 
 
   <div class="content-container" #contentcontainer>
     <div class="d-flex-center">
-      
+
       <form class="auth-form">
         <ion-card-content>
           <ion-text color="primary">
@@ -22,17 +22,17 @@
           </ion-text>
         </ion-card-content>
         <app-logo text="Bienvenidos"></app-logo>
-    
+
         <!-- Contenedor para el botón y el texto -->
-        <div class="button-container">
-          <ion-button 
+        <div class="button-container" *ngIf="isSupported">
+          <ion-button
             class="round-button"
             [ngClass]="{'pressed': isRecording}"
-            (mousedown)="startVoiceRecognition()" 
-            (mouseup)="stopVoiceRecognition()" 
+            (mousedown)="startVoiceRecognition()"
+            (mouseup)="stopVoiceRecognition()"
             (mouseleave)="stopVoiceRecognition()"
             color="primary">
-            <ion-icon 
+            <ion-icon
                 [name]="!isRecording ? 'mic-off' : 'mic'"></ion-icon>
           </ion-button>
           <!-- Mostrar el texto cuando se oprime el botón -->
@@ -40,7 +40,7 @@
             <p>Escuchando...</p>
           </div>
         </div>
-    
+
         <div class="d-flex-center" *ngIf="lastFoundPortal">
           <form class="auth-form">
             <ion-card-content>
@@ -57,10 +57,10 @@
 
     </div>
     <ion-list *ngIf="!loading">
-    
+
     <ion-accordion-group>
       <!-- Acordeón principal para cada portal -->
-      
+
       <ion-accordion *ngFor="let portal of portales" value="{{portal.id}}" id="{{portal.id}}">
         <ion-item slot="header">
           <ion-avatar slot="start">
@@ -106,7 +106,7 @@
       </ion-accordion>
     </ion-accordion-group>
   </ion-list>
-  
+
 
   <!--loade-->
   <ion-list *ngIf="loading">
@@ -119,7 +119,7 @@
             <ion-skeleton-text animated style="width: 100%; height: 100%;"></ion-skeleton-text>
           </ion-avatar>
           <ion-label class="selectable-text"><div> <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text> </div></ion-label>
-          
+
         </ion-item>
         </ion-accordion>
       </ion-accordion-group>

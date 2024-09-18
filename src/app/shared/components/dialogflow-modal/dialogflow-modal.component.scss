@@ -7,19 +7,121 @@
   // Agrega estilos adicionales para el contenedor dinámico si es necesario
 }
 
-.close-button {
+.close-button, .voice-button {
   position: absolute;
-  top: 16px;
-  right: 16px;
   background-color: #fff;
   border: none;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  padding: 8px;
+  padding: 12px;
   cursor: pointer;
-  z-index: 1000; // Asegúrate de que el botón esté por encima del contenido
+  z-index: 1000; // Asegúrate de que los botones estén por encima del contenido
 }
 
-.close-button ion-icon {
-  font-size: 24px;
+.close-button {
+  top: 16px;
+  right: 27px; // Ajusta la posición para que el botón de micrófono no se superponga
+}
+
+
+/* Asegúrate de que estos estilos estén en tu archivo SCSS o CSS */
+
+.voice-button {
+  position: fixed; /* Asegura que el botón se mantenga en una posición fija */
+  bottom: 27px;    /* Espacio desde el borde inferior */
+  left: 8px;      /* Espacio desde el borde izquierdo */
+  background-color: #f0f0f0;
+  border: 1px solid #007bff;
+  border-radius: 50%; /* Forma circular */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Sombra del botón */
+  padding: 8px; /* Tamaño del botón (más pequeño) */
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s; /* Transición suave para los cambios de color */
+  z-index: 1000; /* Asegura que el botón esté encima de otros elementos */
+}
+
+.voice-button ion-icon {
+  font-size: 16px; /* Tamaño del ícono (más pequeño) */
+  color: #007bff; /* Color del ícono */
+}
+
+/* Estilo para cuando el botón está en estado presionado */
+.voice-button.pressed {
+  background-color: #007bff; /* Cambia el color de fondo mientras se presiona */
+  border-color: #0056b3; /* Cambia el color del borde mientras se presiona */
+}
+
+.voice-button.pressed ion-icon {
+  color: #ffffff; /* Cambia el color del ícono mientras se presiona */
+}
+
+
+p:hover {
+  font-weight: bold;
+}
+
+.speech-bubble {
+  position: fixed; /* Asegura que el botón se mantenga en una posición fija */
+  bottom: 33px;    /* Espacio desde el borde inferior */
+  left: 60px;
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  border-radius: 15px;
+  max-width: 480px;
+  word-wrap: break-word;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.805);
+  z-index: 1000; // Asegúrate de que esté encima de otros elementos
+}
+
+
+
+
+.record-container {
+  position: absolute;
+  z-index: 1000;
+}
+.record-button {
+  position: fixed;
+  bottom: 27px;
+  left: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ffffff; /* Blanco cuando no se está presionando */
+  color: #000000; /* Color del icono */
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s; /* Transición suave para los cambios de color */
+}
+
+.record-button.recording {
+  background-color: #2196F3; /* Azul cuando se está presionando */
+}
+
+.record-button.cancel {
+  background-color: #f44336; /* Rojo cuando se cancela */
+}
+
+.cancel-prompt {
+
+  position: fixed;
+  bottom: 70px;
+  left: 28px;
+
+  border-radius: 50%;
+
+  transform: translateX(-50%);
+  background-color: #f44336;
+  color: white;
+  padding: 5px 8px;
+  font-size: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

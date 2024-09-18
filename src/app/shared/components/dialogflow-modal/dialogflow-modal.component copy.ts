@@ -30,16 +30,17 @@ export class DialogflowModalComponent implements OnInit {
         <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
         <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
 
-        <df-messenger
-          project-id="portalbotcb"
-          agent-id="f761968c-5cfc-4b45-9b4b-aeba5d86724b"
-          language-code="es"
-          max-query-length="-1">
-          <df-messenger-chat
-          chat-title="PortalBot CB">
-          </df-messenger-chat>
-        </df-messenger>
 
+        <df-messenger
+        project-id="portalbotcb"
+        allow="microphone;"
+        agent-id="f761968c-5cfc-4b45-9b4b-aeba5d86724b"
+        language-code="es"
+        max-query-length="-1">
+        <df-messenger-chat
+        chat-title="PortalBot CB">
+        </df-messenger-chat>
+        </df-messenger>
         <style>
         df-messenger {
           z-index: 999;
@@ -57,50 +58,52 @@ export class DialogflowModalComponent implements OnInit {
         </style>
 
         <script>
-        // Definición de la variable global
-        let dfMessenger;
-
         // Esperar a que el df-messenger esté completamente cargado
         window.addEventListener('df-messenger-loaded', () => {
-          dfMessenger = document.querySelector('df-messenger');
-          console.log('Dialogflow Messenger cargado y listo.');
+        console.log('Dialogflow Messenger cargado y listo.');
         });
 
         window.addEventListener('df-response-received', (event) => {
-          console.log('Respuesta del chatbot:', event.detail.data.messages);
+        console.log('Respuesta del chatbot:', event.detail.data.messages);
 
-          event.detail.data.messages = event.detail.data.messages.filter(message => {
-          if (message.type === 'text' && message.text) {
-              const text = message.text;
-              console.log('Texto del mensaje:', text);
+        event.detail.data.messages = event.detail.data.messages.filter(message => {
+        if (message.type === 'text' && message.text) {
+            const text = message.text;
+            console.log('Texto del mensaje:', text);
 
-              if ('speechSynthesis' in window) {
-                  const utterance = new SpeechSynthesisUtterance(text);
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
 
-                  // Configurar eventos para depuración
-                  utterance.onstart = () => console.log('Comenzando a reproducir');
-                  utterance.onend = () => console.log('Reproducción completada');
-                  utterance.onerror = (e) => console.error('Error en la reproducción:', e);
+                // Configurar eventos para depuración
+                utterance.onstart = () => console.log('Comenzando a reproducir');
+                utterance.onend = () => console.log('Reproducción completada');
+                utterance.onerror = (e) => console.error('Error en la reproducción:', e);
 
-                  // Reproducir el mensaje
-                  window.speechSynthesis.speak(utterance);
-              } else {
-                  console.log('La API de Text-to-Speech no está soportada en este navegador.');
-              }
-          }
-          return message.type !== 'prueba';
-          });
-          });
+                // Reproducir el mensaje
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.log('La API de Text-to-Speech no está soportada en este navegador.');
+            }
+        }
+        return message.type !== 'prueba';
+        });
+        });
 
 
         </script>
 
-        <script id="customScript">
 
+        <script id="customScript">
+        Variable global para almacenar el mensaje
+        let messageToSend = '';
+
+        // Definir una función para actualizar el mensaje y enviar la solicitud
         function updateMessageAndSend(message) {
-          if (message) {
-            dfMessenger.renderCustomText(message, false);
-            dfMessenger.sendRequest('query', message);
+          const dfMessenger = document.querySelector('df-messenger');
+          messageToSend = message;
+          if (dfMessenger) {
+            dfMessenger.renderCustomText(messageToSend, false);
+            dfMessenger.sendRequest('query', messageToSend);
           }
         }
 
@@ -113,8 +116,22 @@ export class DialogflowModalComponent implements OnInit {
 
         // Escuchar el evento personalizado
         document.addEventListener('customEvent', handleCustomEvent);
+        </>
 
-      </script>
+
+        <script>
+        // Selecciona todas las etiquetas <p> en el documento
+        const paragraphs = document.querySelectorAll('p');
+
+        // Añade un manejador de eventos de mouseover a cada párrafo
+        paragraphs.forEach(paragraph => {
+        paragraph.addEventListener('mouseover', function() {
+        console.log(this.textContent); // Muestra el contenido del párrafo en la consola
+        });
+        });
+        </script>
+
+
 
       </div>
     `;
@@ -147,6 +164,8 @@ export class DialogflowModalComponent implements OnInit {
     this.isRecording = true;
     this.recognition.start();
     this.currentTranscript = '';
+    this.updateVoiceButtonState('normal'); // Cambia el estado del botón a normal
+
     console.log('Iniciando grabación...');
   }
 
@@ -157,8 +176,9 @@ export class DialogflowModalComponent implements OnInit {
       this.currentTranscript = '';
       this.processVoiceCommand(this.finalTranscript);
       this.finalTranscript = '';
-      console.log('Deteniendo grabación...', this.currentTranscript);
+      this.updateVoiceButtonState('normal'); // Cambia el estado del botón a normal después de detener la grabación
       this.cdr.detectChanges();
+      console.log('Deteniendo grabación...', this.currentTranscript);
     }
   }
 
@@ -176,6 +196,7 @@ export class DialogflowModalComponent implements OnInit {
       this.recognition.stop();
       this.currentTranscript = '';
       this.finalTranscript = ''; // Cancelar el texto final
+      this.updateVoiceButtonState('cancelled'); // Cambia el estado del botón a cancelado
       this.cdr.detectChanges();
       console.log('Grabación cancelada.');
     }
@@ -190,23 +211,29 @@ export class DialogflowModalComponent implements OnInit {
 
       this.recognition.onstart = () => {
         console.log('Listening...');
-        this.currentTranscript = '';
-        this.finalTranscript = '';
         this.isRecognizing = true; // Actualiza el estado
       };
 
       this.recognition.onresult = (event: any) => {
-
+        let text = ""
         for (let i = event.resultIndex; i < event.results.length; i++) {
+
           const result = event.results[i];
           if (result.isFinal) {
             this.finalTranscript += result[0].transcript; // Actualiza finalTranscript con el texto final
             this.currentTranscript = this.finalTranscript
           } else {
-            this.currentTranscript = result[0].transcript; // Acumula el texto interino
+            text += result[0].transcript; // Acumula el texto interino
           }
         }
 
+        if(! this.finalTranscript){
+          this.currentTranscript = text
+        }
+
+
+
+        // Forzar la detección de cambios
         this.cdr.detectChanges();
 
         //this.processVoiceCommand(this.currentTranscript);
@@ -214,14 +241,12 @@ export class DialogflowModalComponent implements OnInit {
 
       this.recognition.onerror = (event: any) => {
         console.error('Error occurred:', event.error);
-        this.currentTranscript = '';
-        this.finalTranscript = '';
       };
 
       this.recognition.onend = () => {
         console.log('Click the button to start voice search');
         this.isRecognizing = false; // Actualiza el estado
-
+        this.updateVoiceButtonState('normal'); // Asegura que el botón esté en estado normal cuando termine
       };
     } else {
       this.isSupported = false
@@ -230,7 +255,7 @@ export class DialogflowModalComponent implements OnInit {
   }
 
   processVoiceCommand(command: string): void {
-    if(command) {
+    if(this.finalTranscript){
       console.log('Processing voice command:', command);
 
       // Emitir el evento personalizado con el mensaje
@@ -243,5 +268,17 @@ export class DialogflowModalComponent implements OnInit {
     }
   }
 
+  updateVoiceButtonState(state: 'normal' | 'cancelled') {
+
+  }
+
+
+
+
+
 }
 
+
+/***
+
+*/
