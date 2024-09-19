@@ -280,5 +280,36 @@ export class DialogflowModalComponent implements OnInit {
 
 
 /***
+<div class="sp-container">
+        <button class="sp-button" id="playPauseButton">
+            <span id="playIcon">▶️</span>
+            <span id="pauseIcon" style="display:none;">⏸️</span>
+        </button>
+    </div>
 
+    <style>
+    .sp-button {
+        font-size: 18px;
+        padding: 1px;
+        margin: 0px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .sp-button:hover {
+        background-color: rgba(12, 15, 207, 0.1);
+    }
+
+    .sp-container {
+        position: fixed;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+    }
+    </style>
 */

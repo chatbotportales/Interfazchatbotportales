@@ -62,20 +62,68 @@ p:hover {
 
 .speech-bubble {
   position: fixed; /* Asegura que el botón se mantenga en una posición fija */
-  bottom: 33px;    /* Espacio desde el borde inferior */
-  left: 60px;
-  font-size: 16px;
-  background-color: rgba(255, 255, 255, 0.8);
+  bottom: 25px;    /* Espacio desde el borde inferior */
+  left: 27px;
+  font-size: 14px;
+  background-color: rgb(255, 255, 255);
   color: rgb(0, 0, 0);
-  padding: 10px;
-  border-radius: 15px;
-  max-width: 480px;
+  padding: 14px;
+  border-radius: 40px;
+  max-width: 76%;
   word-wrap: break-word;
-  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.805);
+  box-shadow: 0px 0px 10px rgb(255, 255, 255);
   z-index: 1000; // Asegúrate de que esté encima de otros elementos
 }
 
 
+/* Estilo para dispositivos móviles menores de 701px */
+@media (max-width: 300px) {
+  .speech-bubble {
+    max-width: 250px !important; /* Máximo ancho para móviles */
+    font-size: 14px;  /* Ajuste del tamaño de la fuente */
+  }
+  .record-button {
+    right: 55px !important;
+  }
+  .cancel-prompt {
+    right: 47px !important;
+  }
+}
+
+/* Estilo para pantallas entre 701px y 745px */
+@media (max-width: 411px) {
+  .speech-bubble {
+    max-width: 230px !important; /* Máximo ancho para esta franja */
+    font-size: 14px;  /* Ajuste del tamaño de la fuente */
+  }
+  .record-button {
+    right: 55px !important;
+  }
+  .cancel-prompt {
+    right: 47px !important;
+  }
+}
+
+/* Estilo para pantallas entre 701px y 745px */
+@media (min-width: 412px) and (max-width: 514px) {
+  .record-button {
+    right: 55px !important;
+  }
+  .cancel-prompt {
+    right: 47px !important;
+  }
+}
+
+
+/* Estilo para pantallas entre 701px y 745px */
+@media (max-width: 812px) {
+  .record-button {
+    right: 55px !important;
+  }
+  .cancel-prompt {
+    right: 47px !important;
+  }
+}
 
 
 .record-container {
@@ -84,8 +132,8 @@ p:hover {
 }
 .record-button {
   position: fixed;
-  bottom: 27px;
-  left: 8px;
+  bottom: 29px;
+  right: 75px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -113,15 +161,15 @@ p:hover {
 .cancel-prompt {
 
   position: fixed;
-  bottom: 70px;
-  left: 28px;
+  bottom: 67px;
+  right: 65px;
 
   border-radius: 50%;
 
-  transform: translateX(-50%);
+
   background-color: #f44336;
   color: white;
-  padding: 5px 8px;
+  padding: 3px 6px;
   font-size: 14px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
