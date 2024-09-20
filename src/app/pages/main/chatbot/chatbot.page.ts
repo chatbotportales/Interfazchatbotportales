@@ -164,6 +164,11 @@ export class ChatbotPage implements OnInit {
 
       }
     });
+
+    // Escuchar el evento de cierre del modal
+    document.getElementById('playIcon').style.display = 'inline';
+    document.getElementById('pauseIcon').style.display = 'none';
+    window.speechSynthesis.cancel();
     //return await modal.present();
   }
 

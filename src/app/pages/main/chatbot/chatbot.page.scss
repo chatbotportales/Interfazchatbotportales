@@ -2,7 +2,7 @@
 #dynamicContentContainer {
     z-index: 9999; /* Asigna el índice Z deseado */
   }
-  
+
 h4{
     margin-top: 5px;
     font-weight: bold;
@@ -23,7 +23,7 @@ ion-content {
     flex-direction: column;
     height: 100%;
   }
-  
+
   #centerContainer {
     display: flex;
     justify-content: center;
@@ -31,44 +31,44 @@ ion-content {
     flex-direction: column;
     height: 100%;
   }
-  
+
 
   #contentcontainer {
     padding: 0 16px; // Espacio en los lados
     margin-bottom: 80px; // Espacio en la parte inferior
   }
-  
+
   ion-item {
     --padding-start: 20px; // Espacio en el inicio
     --padding-end: 30px; // Espacio en el final
   }
-  
+
   ion-accordion-group {
     --padding: 0 16px; // Espacio a los lados del grupo de acordeones
   }
-  
+
   .button-row {
     display: flex;
     flex-wrap: wrap; /* Permite que los botones se envuelvan si el espacio es limitado */
     gap: 8px; /* Espacio entre los botones */
     margin-top: 16px; /* Espacio entre los botones y el contenido del portal */
   }
-  
+
   .button-row ion-button {
     flex: 1 1 calc(50% - 8px); /* Los botones ocupan el 50% del ancho menos el espacio del gap */
   }
-  
+
   .map-container {
     margin-top: 16px; /* Espacio entre los botones y el mapa */
     position: relative;
   }
-  
+
   .map-container iframe {
     width: 100%;
     height: 300px; /* Ajusta la altura según sea necesario */
     border: 0;
   }
-  
+
   /* Media query para ajustar el diseño en pantallas más pequeñas */
   @media (max-width: 600px) {
     .button-row ion-button {
@@ -77,10 +77,35 @@ ion-content {
   }
 
   /* Estilo para cuando el botón está en estado presionado */
-ion-button.pressed {
-  background-color: #007bff; /* Cambia el color de fondo mientras se presiona */
-}
+
 
 ion-button.pressed ion-icon {
+  color: #ffffff; /* Cambia el color del ícono mientras se presiona */
+}
+
+
+.round-button {
+  background-color: #f0f0f0;
+  border: 1px solid #007bff;
+  border-radius: 50%; /* Forma circular */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Sombra del botón */
+  padding: 8px 10px; /* Tamaño del botón (más pequeño) */
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s; /* Transición suave para los cambios de color */
+  z-index: 1000; /* Asegura que el botón esté encima de otros elementos */
+}
+
+.round-button ion-icon {
+  font-size: 16px; /* Tamaño del ícono (más pequeño) */
+  color: #007bff; /* Color del ícono */
+}
+
+/* Estilo para cuando el botón está en estado presionado */
+.round-button.pressed {
+  background-color: #007bff; /* Cambia el color de fondo mientras se presiona */
+  border-color: #0056b3; /* Cambia el color del borde mientras se presiona */
+}
+
+.round-button.pressed ion-icon {
   color: #ffffff; /* Cambia el color del ícono mientras se presiona */
 }

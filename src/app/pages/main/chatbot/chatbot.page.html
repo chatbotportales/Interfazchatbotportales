@@ -1,4 +1,4 @@
-<app-header [showMenu]="true" title="Chatbot Portales"></app-header>
+<app-header [showMenu]="true" title="Chat: Portales Interactivos Ciudad Bolivar"></app-header>
 
 
 
@@ -21,20 +21,20 @@
             <h1>Hola!</h1>
           </ion-text>
         </ion-card-content>
-        <app-logo text="Bienvenidos"></app-logo>
+        <app-logo text="Bienvenidos a PortalBot CB"></app-logo>
 
         <!-- Contenedor para el botón y el texto -->
         <div class="button-container" *ngIf="isSupported">
-          <ion-button
+          <button
             class="round-button"
             [ngClass]="{'pressed': isRecording}"
             (mousedown)="startVoiceRecognition()"
             (mouseup)="stopVoiceRecognition()"
             (mouseleave)="stopVoiceRecognition()"
-            color="primary">
+            >
             <ion-icon
                 [name]="!isRecording ? 'mic-off' : 'mic'"></ion-icon>
-          </ion-button>
+          </button>
           <!-- Mostrar el texto cuando se oprime el botón -->
           <div *ngIf="isRecording" class="recording-text">
             <p>Escuchando...</p>
