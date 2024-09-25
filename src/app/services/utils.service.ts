@@ -13,7 +13,7 @@ export class UtilsService {
   modalCtr = inject(ModalController);
   router = inject(Router);
   alertCtrl = inject(AlertController);
-  
+
 
   async takePicture (promptLabelHeader: string) {
     return await Camera.getPhoto({
@@ -52,13 +52,13 @@ export class UtilsService {
 
   // modal
   async presentModal(opts: ModalOptions) {
-    const modal = await this.modalCtr.create(opts); 
+    const modal = await this.modalCtr.create(opts);
     await modal.present();
 
     const { data } = await modal.onWillDismiss();
 
     if(data) return data;
-  
+
   }
 
   dismissModal(data?: any){
