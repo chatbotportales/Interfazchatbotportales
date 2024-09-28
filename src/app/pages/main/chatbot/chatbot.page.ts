@@ -44,6 +44,140 @@ export class ChatbotPage implements OnInit {
   expandedPortalId: string | null = null; // Variable para controlar el estado expandido
   selectedPortalId: string | null = null; // Variable para controlar el estado de selección
 
+  //chatbot--------------------------------------------------------------------------------
+  private getHtmlContent(): string {
+    return `
+    <div>
+      <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+      <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+
+      <style>
+      df-messenger {
+        z-index: 999;
+        position: fixed;
+        --df-messenger-font-color: #000;
+        --df-messenger-font-family: Google Sans;
+        --df-messenger-chat-background: #f3f6fc;
+        --df-messenger-message-user-background: #d3e3fd;
+        --df-messenger-message-bot-background: #fff;
+        --df-messenger-send-icon-offset-x: 50px;
+        bottom: 0;
+        right: 0;
+        top: 0;
+        width: 100%;
+
+      }
+
+      </style>
+
+      <script>
+      // Comprobar si la API de SpeechSynthesis está soportada
+      if (!('speechSynthesis' in window)) {
+          // Si no está soportada, ocultar el contenedor de botones
+          document.getElementById('speechControls').style.display = 'none';
+      }
+  </script>
+
+  <script>
+    // Definición de la variable global
+    if (typeof dfMessenger === 'undefined') {
+      let dfMessenger;
+    }
+
+    if (typeof lastSpeechText === 'undefined') {
+      let lastSpeechText = ''; // Variable para guardar el último texto convertido a audio
+
+          // Esperar a que el df-messenger esté completamente cargado
+          window.addEventListener('df-messenger-loaded', () => {
+            dfMessenger = document.querySelector('df-messenger');
+            console.log('Dialogflow Messenger cargado y listo.');
+          });
+
+          window.addEventListener('df-response-received', (event) => {
+            console.log('Respuesta del chatbot:', event.detail.data.messages);
+
+            event.detail.data.messages = event.detail.data.messages.filter(message => {
+            if (message.type === 'text' && message.text) {
+                const text = message.text;
+                lastSpeechText = message.text;
+                localStorage.setItem('lastSpeechText', lastSpeechText);
+                console.log('Texto del mensaje:', text);
+
+                if ('speechSynthesis' in window && mutespeech) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+
+                    // Configurar eventos para depuración
+                    utterance.onstart = () => {
+                      console.log('Comenzando a reproducir');
+
+                      // Cambiar el icono a pausa
+                      document.getElementById('playIcon').style.display = 'none';
+                      document.getElementById('pauseIcon').style.display = 'inline';
+                      isPlaying = true;
+
+                    }
+                    utterance.onend = () => {
+                        console.log('Reproducción completada');
+                        // Cambiar el icono de vuelta a play
+                        document.getElementById('playIcon').style.display = 'inline';
+                        document.getElementById('pauseIcon').style.display = 'none';
+                        isPlaying = false;
+                    };
+                    utterance.onerror = (e) => {
+                        console.error('Error en la reproducción:', e);
+                        // Asegurarse de que el icono vuelva a play en caso de error
+                        document.getElementById('playIcon').style.display = 'inline';
+                        document.getElementById('pauseIcon').style.display = 'none';
+                        isPlaying = false;
+                    };
+
+                    // Reproducir el mensaje
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('Mute habilitado o La API de Text-to-Speech no está soportada en este navegador.');
+                }
+            }
+            return message.type !== 'prueba';
+            });
+            });
+
+          }
+          </script>
+
+
+          <script id="customScript">
+
+          if (typeof scriptcreado === 'undefined') {
+            var scriptcreado = true;
+
+
+          function updateMessageAndSend(message) {
+            if (message) {
+              dfMessenger.renderCustomText(message, false);
+              dfMessenger.sendRequest('query', message);
+            }
+          }
+
+          // Función para manejar el evento personalizado
+          function handleCustomEvent(event) {
+            if (event.detail && event.detail.message) {
+              updateMessageAndSend(event.detail.message);
+            }
+          }
+
+          // Escuchar el evento personalizado
+          document.addEventListener('customEvent', handleCustomEvent);
+
+        }
+</script>
+
+
+    </div>
+      `;
+  }
+
+  //----------------------------------------------------------------------
+
   constructor(private navCtrl: NavController, private router: Router, private cdr: ChangeDetectorRef) {}
 
   startVoiceRecognition(): void {
@@ -62,9 +196,38 @@ export class ChatbotPage implements OnInit {
     }
   }
 
+  private executeScriptsAndStyles(container: HTMLElement): void {
+    const scripts = container.querySelectorAll('script');
+    scripts.forEach(script => {
+        const scriptElement = document.createElement('script');
+        scriptElement.innerHTML = script.innerHTML;
+        container.appendChild(scriptElement);
+    });
+
+    const styles = container.querySelectorAll('style');
+    styles.forEach(style => {
+        const styleElement = document.createElement('style');
+        styleElement.innerHTML = style.innerHTML;
+        container.appendChild(styleElement);
+    });
+}
+
+
   ngOnInit() {
     this.loadPortales();
-    this.setupVoiceRecognition();  }
+    this.setupVoiceRecognition();
+
+    // Comprobar si el contenido ya fue insertado
+    const dynamicContentContainer = document.getElementById('dynamicContentContainerdos');
+    if (dynamicContentContainer && !dynamicContentContainer.classList.contains('content-inserted')) {
+        dynamicContentContainer.classList.add('content-inserted'); // Añadir clase para indicar que se insertó contenido
+        dynamicContentContainer.innerHTML = this.getHtmlContent(); // Usar una función para obtener el HTML
+
+        // Ejecutar scripts y estilos presentes en el HTML
+        this.executeScriptsAndStyles(dynamicContentContainer);
+    }
+
+  }
 
   async loadPortales() {
     this.loading = true;
@@ -170,6 +333,7 @@ export class ChatbotPage implements OnInit {
     document.getElementById('pauseIcon').style.display = 'none';
     window.speechSynthesis.cancel();
     //return await modal.present();
+
   }
 
   async openPortalModal() {

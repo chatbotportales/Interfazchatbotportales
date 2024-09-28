@@ -25,8 +25,7 @@ export class DialogflowModalComponent implements OnInit {
   private getHtmlContent(): string {
     return `
     <div>
-      <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-      <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+
 
       <df-messenger
 
@@ -98,215 +97,134 @@ export class DialogflowModalComponent implements OnInit {
       </style>
 
       <script>
-          // Comprobar si la API de SpeechSynthesis está soportada
-          if (!('speechSynthesis' in window)) {
-              // Si no está soportada, ocultar el contenedor de botones
-              document.getElementById('speechControls').style.display = 'none';
-          }
-      </script>
+      if (typeof isPlaying === 'undefined') {
+          var isPlaying = false; // Para rastrear el estado de reproducción
+      }
 
-      <script>
-        // Definición de la variable global
-        if (typeof dfMessenger === 'undefined') {
-          let dfMessenger;
-        }
-
-        if (typeof lastSpeechText === 'undefined') {
-          let lastSpeechText = ''; // Variable para guardar el último texto convertido a audio
-
-
-      // Esperar a que el df-messenger esté completamente cargado
-      window.addEventListener('df-messenger-loaded', () => {
-        dfMessenger = document.querySelector('df-messenger');
-        console.log('Dialogflow Messenger cargado y listo.');
-      });
-
-      window.addEventListener('df-response-received', (event) => {
-        console.log('Respuesta del chatbot:', event.detail.data.messages);
-
-        event.detail.data.messages = event.detail.data.messages.filter(message => {
-        if (message.type === 'text' && message.text) {
-            const text = message.text;
-            lastSpeechText = message.text;
-            localStorage.setItem('lastSpeechText', lastSpeechText);
-            console.log('Texto del mensaje:', text);
-
-            if ('speechSynthesis' in window && mutespeech) {
-                const utterance = new SpeechSynthesisUtterance(text);
-
-                // Cambiar el icono a pausa
-                document.getElementById('playIcon').style.display = 'none';
-                document.getElementById('pauseIcon').style.display = 'inline';
-                isPlaying = true;
-
-                // Configurar eventos para depuración
-                utterance.onstart = () => console.log('Comenzando a reproducir');
-                utterance.onend = () => {
-                    console.log('Reproducción completada');
-                    // Cambiar el icono de vuelta a play
-                    document.getElementById('playIcon').style.display = 'inline';
-                    document.getElementById('pauseIcon').style.display = 'none';
-                    isPlaying = false;
-                };
-                utterance.onerror = (e) => {
-                    console.error('Error en la reproducción:', e);
-                    // Asegurarse de que el icono vuelva a play en caso de error
-                    document.getElementById('playIcon').style.display = 'inline';
-                    document.getElementById('pauseIcon').style.display = 'none';
-                    isPlaying = false;
-                };
-
-                // Reproducir el mensaje
-                window.speechSynthesis.speak(utterance);
-            } else {
-                console.log('Mute habilitado o La API de Text-to-Speech no está soportada en este navegador.');
-            }
-        }
-        return message.type !== 'prueba';
-        });
-        });
+      if (typeof mutespeech === 'undefined') {
+          var mutespeech = true; // Para rastrear el estado de mute
 
       }
-      </script>
+      document.getElementById('playPauseButton').addEventListener('click', () => {
+          if (lastSpeechText && mutespeech) {
+              if (!isPlaying) {
 
-      <script>
-          if (typeof isPlaying === 'undefined') {
-              var isPlaying = false; // Para rastrear el estado de reproducción
-          }
+                if ('speechSynthesis' in window) {
+                  const utterance = new SpeechSynthesisUtterance(lastSpeechText);
 
-          if (typeof mutespeech === 'undefined') {
-              var mutespeech = true; // Para rastrear el estado de mute
-
-          }
-          document.getElementById('playPauseButton').addEventListener('click', () => {
-              if (lastSpeechText && mutespeech) {
-                  if (!isPlaying) {
-
-                    if ('speechSynthesis' in window) {
-                      const utterance = new SpeechSynthesisUtterance(lastSpeechText);
-
+                  // Configurar eventos para depuración
+                  utterance.onstart = () => {
+                      console.log('Comenzando a reproducir');
                       // Cambiar el icono a pausa
                       document.getElementById('playIcon').style.display = 'none';
                       document.getElementById('pauseIcon').style.display = 'inline';
                       isPlaying = true;
+                  };
+                  utterance.onend = () => {
+                      console.log('Reproducción completada');
+                      // Cambiar el icono de vuelta a play
+                      document.getElementById('playIcon').style.display = 'inline';
+                      document.getElementById('pauseIcon').style.display = 'none';
+                      isPlaying = false;
+                  };
+                  utterance.onerror = (e) => {
+                      console.error('Error en la reproducción:', e);
+                      // Asegurarse de que el icono vuelva a play en caso de error
+                      document.getElementById('playIcon').style.display = 'inline';
+                      document.getElementById('pauseIcon').style.display = 'none';
+                      isPlaying = false;
+                  };
 
-                      // Configurar eventos para depuración
-                      utterance.onstart = () => {
-                          console.log('Comenzando a reproducir');
-                      };
-                      utterance.onend = () => {
-                          console.log('Reproducción completada');
-                          // Cambiar el icono de vuelta a play
-                          document.getElementById('playIcon').style.display = 'inline';
-                          document.getElementById('pauseIcon').style.display = 'none';
-                          isPlaying = false;
-                      };
-                      utterance.onerror = (e) => {
-                          console.error('Error en la reproducción:', e);
-                          // Asegurarse de que el icono vuelva a play en caso de error
-                          document.getElementById('playIcon').style.display = 'inline';
-                          document.getElementById('pauseIcon').style.display = 'none';
-                          isPlaying = false;
-                      };
-
-                      // Reproducir el mensaje
-                      window.speechSynthesis.speak(utterance);
-                    } else {
-                        console.log('La API de Text-to-Speech no está soportada en este navegador.');
-                    }
-
-                  } else {
-                    isPlaying = false;
-                    document.getElementById('playIcon').style.display = 'inline';
-                    document.getElementById('pauseIcon').style.display = 'none';
-                    window.speechSynthesis.cancel();
-                    console.log('Reproducción pausada', lastSpeechText);
-                  }
-
-              }
-          });
-
-
-      </script>
-
-      <script>
-
-        // Cargar estado de Local Storage
-        window.addEventListener('df-messenger-loaded', () => {
-            const savedlastSpeechText = localStorage.getItem('lastSpeechText');
-            if (savedlastSpeechText !== null){
-              lastSpeechText = savedlastSpeechText;
-            }
-            const savedMuteState = localStorage.getItem('mutespeech');
-            const savedPlayingState = localStorage.getItem('isPlaying');
-            console.log("------mute", savedMuteState)
-
-            if (savedMuteState !== null) {
-                mutespeech = savedMuteState === 'true'; // Convertir a boolean
-                document.getElementById('muteIcon').style.display = mutespeech ? 'none' : 'inline';
-                document.getElementById('unmuteIcon').style.display = mutespeech ? 'inline' : 'none';
-                document.getElementById('playPauseButton').style.display = mutespeech ? 'inline' : 'none' ;
-            }
-
-            if (savedPlayingState !== null) {
-                isPlaying = savedPlayingState === 'true'; // Convertir a boolean
-                if (isPlaying) {
-                    document.getElementById('playIcon').style.display = 'none';
-                    document.getElementById('pauseIcon').style.display = 'inline';
+                  // Reproducir el mensaje
+                  window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('La API de Text-to-Speech no está soportada en este navegador.');
                 }
-            }
-        });
 
-      </script>
+              } else {
+                isPlaying = false;
+                document.getElementById('playIcon').style.display = 'inline';
+                document.getElementById('pauseIcon').style.display = 'none';
+                window.speechSynthesis.cancel();
+                console.log('Reproducción pausada', lastSpeechText);
+              }
 
-
-      <script>
-
-        document.getElementById('muteButton').addEventListener('click', () => {
-          mutespeech = !mutespeech; // Cambiar el estado de mute
-          document.getElementById('muteIcon').style.display = mutespeech ? 'none' : 'inline';
-          document.getElementById('unmuteIcon').style.display = mutespeech ? 'inline' : 'none';
-          console.log('Mute está ahora:', mutespeech ? 'Activado' : 'Desactivado');
-
-          document.getElementById('playPauseButton').style.display = mutespeech ? 'inline' : 'none';
-          localStorage.setItem('mutespeech', mutespeech);
-          console.log("------ca", mutespeech)
-          if (isPlaying) {
-              isPlaying = false;
-              document.getElementById('playIcon').style.display = 'inline';
-              document.getElementById('pauseIcon').style.display = 'none';
-
-              window.speechSynthesis.cancel();
           }
       });
 
 
-      </script>
+  </script>
 
-      <script id="customScript">
+  <script>
 
-      if (typeof scriptcreado === 'undefined') {
-        var scriptcreado = true;
-
-
-      function updateMessageAndSend(message) {
-        if (message) {
-          dfMessenger.renderCustomText(message, false);
-          dfMessenger.sendRequest('query', message);
+    // Cargar estado de Local Storage
+    window.addEventListener('df-messenger-loaded', () => {
+        const savedlastSpeechText = localStorage.getItem('lastSpeechText');
+        if (savedlastSpeechText !== null){
+          lastSpeechText = savedlastSpeechText;
         }
-      }
+        const savedMuteState = localStorage.getItem('mutespeech');
+        const savedPlayingState = localStorage.getItem('isPlaying');
+        console.log("------mute", savedMuteState)
 
-      // Función para manejar el evento personalizado
-      function handleCustomEvent(event) {
-        if (event.detail && event.detail.message) {
-          updateMessageAndSend(event.detail.message);
+        if (savedMuteState !== null) {
+            mutespeech = savedMuteState === 'true'; // Convertir a boolean
+            document.getElementById('muteIcon').style.display = mutespeech ? 'none' : 'inline';
+            document.getElementById('unmuteIcon').style.display = mutespeech ? 'inline' : 'none';
+            document.getElementById('playPauseButton').style.display = mutespeech ? 'inline' : 'none' ;
         }
-      }
 
-      // Escuchar el evento personalizado
-      document.addEventListener('customEvent', handleCustomEvent);
+        if (savedPlayingState !== null) {
+            isPlaying = savedPlayingState === 'true'; // Convertir a boolean
+            if (isPlaying) {
+                document.getElementById('playIcon').style.display = 'none';
+                document.getElementById('pauseIcon').style.display = 'inline';
+            }
+        }
+    });
+
+  </script>
+
+  <script>
+
+    document.getElementById('muteButton').addEventListener('click', () => {
+      mutespeech = !mutespeech; // Cambiar el estado de mute
+      document.getElementById('muteIcon').style.display = mutespeech ? 'none' : 'inline';
+      document.getElementById('unmuteIcon').style.display = mutespeech ? 'inline' : 'none';
+      console.log('Mute está ahora:', mutespeech ? 'Activado' : 'Desactivado');
+
+      document.getElementById('playPauseButton').style.display = mutespeech ? 'inline' : 'none';
+      localStorage.setItem('mutespeech', mutespeech);
+      console.log("------ca", mutespeech)
+      if (isPlaying) {
+          isPlaying = false;
+          document.getElementById('playIcon').style.display = 'inline';
+          document.getElementById('pauseIcon').style.display = 'none';
+
+          window.speechSynthesis.cancel();
+      }
+  });
+
+
+  </script>
+
+  <script>
+  if (typeof muteintent === 'undefined') {
+    let muteintent = '';
+
+      window.addEventListener('df-user-input-entered', (event) => {
+        console.log(event.detail.input);
+
+              isPlaying = false;
+              document.getElementById('playIcon').style.display = 'inline';
+              document.getElementById('pauseIcon').style.display = 'none';
+              window.speechSynthesis.cancel();
+              console.log('Reproducción pausada', lastSpeechText);
+
+      });
     }
-    </script>
+
+  </script>
 
     </div>
       `;
