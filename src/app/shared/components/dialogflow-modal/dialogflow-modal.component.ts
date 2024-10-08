@@ -146,7 +146,7 @@ export class DialogflowModalComponent implements OnInit {
                 document.getElementById('playIcon').style.display = 'inline';
                 document.getElementById('pauseIcon').style.display = 'none';
                 window.speechSynthesis.cancel();
-                console.log('Reproducción pausada', lastSpeechText);
+                console.log('Reproducción pausada 2.', lastSpeechText);
               }
 
           }
@@ -219,7 +219,7 @@ export class DialogflowModalComponent implements OnInit {
               document.getElementById('playIcon').style.display = 'inline';
               document.getElementById('pauseIcon').style.display = 'none';
               window.speechSynthesis.cancel();
-              console.log('Reproducción pausada', lastSpeechText);
+              console.log('Reproducción pausada .1', lastSpeechText);
 
       });
     }

@@ -84,6 +84,10 @@ export class ChatbotPage implements OnInit {
       let dfMessenger;
     }
 
+    if (typeof textodos === 'undefined') {
+      let textodos = "";
+    }
+
     if (typeof lastSpeechText === 'undefined') {
       let lastSpeechText = ''; // Variable para guardar el último texto convertido a audio
 
@@ -97,6 +101,7 @@ export class ChatbotPage implements OnInit {
             console.log('Respuesta del chatbot:', event.detail.data.messages);
 
             event.detail.data.messages = event.detail.data.messages.filter(message => {
+
             if (message.type === 'text' && message.text) {
                 const text = message.text;
                 lastSpeechText = message.text;
@@ -136,6 +141,50 @@ export class ChatbotPage implements OnInit {
                 } else {
                     console.log('Mute habilitado o La API de Text-to-Speech no está soportada en este navegador.');
                 }
+            }
+            if (message.type === 'chips' && message.options) {
+              textodos = "";
+              for (let i = 0; i < message.options.length; i++) {
+                  textodos += message.options[i].text + ', '; // Agregar el texto con una coma y espacio
+              }
+
+              const savedlastSpeechTextdos = localStorage.getItem('lastSpeechText');
+              localStorage.setItem('lastSpeechText', savedlastSpeechTextdos + textodos);
+              console.log('Texto de las sugerencias:', textodos);
+              if ('speechSynthesis' in window && mutespeech) {
+                const utterancedos = new SpeechSynthesisUtterance(textodos);
+
+                // Configurar eventos para depuración
+                utterancedos.onstart = () => {
+                  console.log('Comenzando a reproducir');
+
+                  // Cambiar el icono a pausa
+                  document.getElementById('playIcon').style.display = 'none';
+                  document.getElementById('pauseIcon').style.display = 'inline';
+                  isPlaying = true;
+
+                }
+                utterancedos.onend = () => {
+                    console.log('Reproducción completada');
+                    // Cambiar el icono de vuelta a play
+                    document.getElementById('playIcon').style.display = 'inline';
+                    document.getElementById('pauseIcon').style.display = 'none';
+                    isPlaying = false;
+                };
+                utterancedos.onerror = (e) => {
+                    console.error('Error en la reproducción:', e);
+                    // Asegurarse de que el icono vuelva a play en caso de error
+                    document.getElementById('playIcon').style.display = 'inline';
+                    document.getElementById('pauseIcon').style.display = 'none';
+                    isPlaying = false;
+                };
+
+                // Reproducir el mensaje
+                window.speechSynthesis.speak(utterancedos);
+              } else {
+                  console.log('Mute habilitado o La API de Text-to-Speech no está soportada en este navegador.');
+              }
+
             }
             return message.type !== 'prueba';
             });
