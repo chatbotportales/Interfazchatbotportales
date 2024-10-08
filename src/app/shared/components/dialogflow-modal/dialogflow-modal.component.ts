@@ -212,7 +212,9 @@ export class DialogflowModalComponent implements OnInit {
   if (typeof muteintent === 'undefined') {
     let muteintent = '';
 
-      window.addEventListener('df-user-input-entered', (event) => {
+
+
+      window.addEventListener('df-request-sent', (event) => {
         console.log(event.detail.input);
 
               isPlaying = false;
